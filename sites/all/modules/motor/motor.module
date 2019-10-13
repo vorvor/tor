@@ -1,0 +1,269 @@
+<?php
+
+function motor_menu() {
+
+  $items['dashboard'] = array(
+    'title' => 'Dashboard',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('motor_form'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'main-menu',
+  );
+
+  $items['dashboard'] = array(
+    'title' => 'Dashboard',
+    'page callback' => 'motor_dashboard',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'main-menu',
+  );
+
+  $items['ajax/search-owner/%'] = array(
+    'access arguments' => array('access administration pages'),
+    'page callback' => 'motor_search_owner',
+    'access callback' => 'motor_search_owner_permission',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['ajax/custom-ac'] = array(
+    'access arguments' => array('access administration pages'),
+    'page callback' => 'motor_custom_autocomplete',
+    'access callback' => 'motor_search_owner_permission',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+function motor_init() {
+  $path = parse_url(request_uri(), PHP_URL_PATH);
+
+  $path_elements = explode('/', $path);
+  array_pop($path_elements);
+  $path_without_last = implode('/', $path_elements);
+
+  drupal_add_js(drupal_get_path('module', 'motor') . '/js/script.js');
+
+  if ($path_without_last == '/node/add/event-treatment') {
+    drupal_add_library('system', 'ui.autocomplete');
+    
+    $terms_anamnesis = motor_taxonomy_terms_to_jsautocomplete('treatments_anamnesis');
+    drupal_add_js($terms_anamnesis, 'setting');
+
+    $terms_complementary = motor_taxonomy_terms_to_jsautocomplete('treatments_complementary');
+    drupal_add_js($terms_complementary, 'setting');
+
+    $terms_notes = motor_taxonomy_terms_to_jsautocomplete('treatments_notes');
+    drupal_add_js($terms_notes, 'setting');
+
+
+    drupal_add_js(drupal_get_path('module', 'motor') . '/js/motor_autocomplete.js');
+    drupal_add_css(drupal_get_path('module', 'motor') . '/css/motor_autocomplete.css');
+  }
+
+
+
+  if ($path === '/dashboard') {
+    drupal_add_js(drupal_get_path('module', 'motor') . '/js/dashboard.js');
+    $settings = array(
+      'path' => drupal_get_path('module', 'motor'),
+   );
+    
+  }
+
+}
+
+function motor_search_owner_permission() {
+  return TRUE;
+}
+
+function motor_search_node($search_phrase) {
+  $query = db_select('node', 'n')
+  ->fields('n', array('nid', 'title', 'type'))
+  ->condition('n.title', '%' . db_like($search_phrase) . '%', 'LIKE')
+  ->orderBy('n.title', 'ASC')
+  ->range(0,10);
+
+  $results = $query
+  ->execute()
+  ->fetchAll();
+
+  foreach ($results as $row) { 
+    if ($row->type == 'pet') {
+      $query = db_select('field_data_field_pets', 'p')
+      ->fields('p', array('entity_id'))
+      ->condition('p.field_pets_nid', $row->nid)
+      ->range(0,1);
+
+      $results = $query
+      ->execute()
+      ->fetchAll();
+
+      $row->nid = $results[0]->entity_id;
+    }
+    
+    $nids[] = (int)$row->nid;
+  }
+
+  return $nids;
+}
+
+function motor_form($form, &$form_state) {
+
+  $form['search_phrase'] = array(
+    '#title' => t('Search'),
+    '#type' => 'textfield',
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Submit',
+  );
+
+  if (isset($form_state['storage'])) {
+    $form['output'] = array(
+      '#markup' => $form_state['storage']['output'],
+    );
+  }
+
+  $form['search_results'] = array(
+    '#markup' => '<div id="search-results-owners"></div>' . '<div id="search-results-pets"></div>',
+  );
+
+
+  return $form;
+}
+
+function motor_form_submit($form, &$form_state) {
+}
+
+function motor_search_owner($search_phrase) {
+  $nids = motor_search_node($search_phrase);
+  print views_embed_view('owners', 'page', implode(',', $nids));
+}
+
+function motor_dashboard() {
+  $output = file_get_contents(drupal_get_path('module', 'motor') . '/templates/dashboard.tpl.php');
+  $output = str_replace('###serach-results###', views_embed_view('owners', 'page'), $output); 
+  return $output;
+}
+
+function motor_block_info() {
+  $blocks = array();
+  
+  $blocks['vaccinate'] = array(
+    'info' => t('Vaccinate'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['treatment'] = array(
+    'info' => t('Treatment'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['loggedin_user'] = array(
+    'info' => t('Logged in user'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+
+  return $blocks;
+}
+
+function motor_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'vaccinate':
+      if (user_access('access content')) {
+          $block['subject'] = t('Vaccinate');
+          $block['content'] = l('New vaccinate', '/node/add/event-vaccinate/' . arg(1), array(
+            'attributes' => array(
+              'id' => 'vaccinate',
+            ),
+          )) . '<div id="former-vaccinates">' . views_embed_view('former_vaccinates', 'default', arg(1)) . '</div>';
+      }
+      else {
+          $block['content'] = t('No content available.');
+      }
+    break;
+
+    case 'treatment':
+      if (user_access('access content')) {
+          $block['subject'] = t('Treatment');
+          $block['content'] = l('New treatment', '/node/add/event-treatment/' . arg(1), array(
+            'attributes' => array(
+              'id' => 'treatment',
+            ),
+          )) . '<div id="former-treatments">' . views_embed_view('former_treatments', 'default', arg(1)) . '</div>';
+      }
+      else {
+          $block['content'] = t('No content available.');
+      }
+    break;
+
+    case 'loggedin_user':
+      global $user;
+      $block['content'] = $user->name . '(#' . $user->uid . ') ' . t('logged in');
+    break;
+  }
+  return $block;
+}
+
+function motor_node_presave($node) {
+  if ($node->type == 'event_treatment' || $node->type == 'event_vaccinate') {
+    $node->field_pet[LANGUAGE_NONE][0]['nid'] = arg(3);
+  }
+
+  if ($node->type == 'event_treatment') {
+    $terms = explode(',', $node->field_anamnesis[LANGUAGE_NONE][0]['value']);
+    foreach ($terms as $term) {
+      $term = trim($term);
+      motor_save_new_term($term, 'treatments_anamnesis');
+    }
+  }
+}
+
+function motor_taxonomy_terms_to_jsautocomplete($voc) {
+  $vocabulary = taxonomy_vocabulary_machine_name_load($voc);
+  $terms = entity_load('taxonomy_term', FALSE, array('vid' => $vocabulary->vid));
+
+  foreach ($terms as $term) {
+    $terms_refactored[] = $term->name;
+  }
+  return array($voc => $terms_refactored);
+}
+
+function motor_save_new_term($termName, $vocabName) {
+
+  $termObj = taxonomy_get_term_by_name($termName, $vocabName);
+  if (empty($termObj)) {
+    $vocabObj = taxonomy_vocabulary_machine_name_load($vocabName);
+ 
+    $term = (object) array(
+     'name' => $termName,
+     'vid' => $vocabObj->vid,
+    );
+
+    taxonomy_term_save($term);
+  } else {
+    $term = reset($termObj);
+  }
+
+  return $term->tid;
+
+}
+/*
+function motor_form_alter(&$form, &$form_state, $form_id) {
+  dpm($form_id);
+
+  if ($form_id == 'event_treatment_node_form') {
+    $form['field_anamnesis'][LANGUAGE_NONE]['#autocomplete_path'] = 'ajax/custom-ac';    
+    $form['field_anamnesis'][LANGUAGE_NONE][0]['#autocomplete_path'] = 'ajax/custom-ac';
+    $form['field_anamnesis'][LANGUAGE_NONE][0]['value']['#autocomplete_path'] = 'ajax/custom-ac';
+    dpm($form);
+  }
+}
+*/
