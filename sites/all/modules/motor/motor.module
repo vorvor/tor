@@ -50,9 +50,21 @@ function motor_init() {
   if ($path_without_last == '/node/add/event-treatment') {
     drupal_add_library('system', 'ui.autocomplete');
     
-    $terms_anamnesis = motor_taxonomy_terms_to_jsautocomplete('treatments_anamnesis');
-    drupal_add_js($terms_anamnesis, 'setting');
+    // Pass terms from vocabs for js autocomplete.
+    $treatment_vocabs = array(
+      'field_anamnesis' => 'treatments_anamnesis',
+      'field_preset_state' => 'treatments_present_state',
+      'field_diagnosis' => 'treatments_diagnosis',
+      'field_complementary' => 'treatments_complementary',
+      'field_notes' => 'treatments_notes',
+      'field_operation' => 'treatments_operation',
+    );
 
+    foreach ($treatment_vocabs as $vocab) {
+      $terms = motor_taxonomy_terms_to_jsautocomplete($vocab);
+      drupal_add_js($terms, 'setting');
+    }
+    
     $terms_complementary = motor_taxonomy_terms_to_jsautocomplete('treatments_complementary');
     drupal_add_js($terms_complementary, 'setting');
 
@@ -230,6 +242,7 @@ function motor_taxonomy_terms_to_jsautocomplete($voc) {
   $vocabulary = taxonomy_vocabulary_machine_name_load($voc);
   $terms = entity_load('taxonomy_term', FALSE, array('vid' => $vocabulary->vid));
 
+  $terms_refactored = [];
   foreach ($terms as $term) {
     $terms_refactored[] = $term->name;
   }
@@ -255,15 +268,25 @@ function motor_save_new_term($termName, $vocabName) {
   return $term->tid;
 
 }
-/*
+
 function motor_form_alter(&$form, &$form_state, $form_id) {
   dpm($form_id);
 
   if ($form_id == 'event_treatment_node_form') {
-    $form['field_anamnesis'][LANGUAGE_NONE]['#autocomplete_path'] = 'ajax/custom-ac';    
-    $form['field_anamnesis'][LANGUAGE_NONE][0]['#autocomplete_path'] = 'ajax/custom-ac';
-    $form['field_anamnesis'][LANGUAGE_NONE][0]['value']['#autocomplete_path'] = 'ajax/custom-ac';
+    $treatment_vocabs = array(
+      'field_anamnesis' => 'treatments_anamnesis',
+      'field_present_state' => 'treatments_present_state',
+      'field_diagnosis' => 'treatments_diagnosis',
+      'field_complementary' => 'treatments_complementary',
+      'field_notes' => 'treatments_notes',
+      'field_operation' => 'treatments_operation',
+    );
+
+    foreach ($treatment_vocabs as $key => $voc) {
+      $form[$key][LANGUAGE_NONE][0]['value']['#attributes'] = array(
+        'data-voc' => $voc,
+      );
+    }
     dpm($form);
   }
 }
-*/

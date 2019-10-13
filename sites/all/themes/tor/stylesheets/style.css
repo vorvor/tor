@@ -1,26 +1,26 @@
-/* line 2, ../sass/style.sass */
-body.node-type-pet .views-field {
-  text-align: center;
+/* line 3, ../sass/style.sass */
+body.node-type-pet .views-label {
+  font-weight: bold;
 }
 
-/* line 5, ../sass/style.sass */
+/* line 6, ../sass/style.sass */
 #comments {
   display: none;
 }
 
-/* line 9, ../sass/style.sass */
+/* line 10, ../sass/style.sass */
 #block-system-main-menu ul {
   margin: 0;
   padding: 0;
 }
-/* line 12, ../sass/style.sass */
+/* line 13, ../sass/style.sass */
 #block-system-main-menu ul li {
   float: left;
   margin-right: 20px;
   list-style-image: none;
   list-style-type: none;
 }
-/* line 17, ../sass/style.sass */
+/* line 18, ../sass/style.sass */
 #block-system-main-menu ul li a {
   padding: 8px 20px;
   background: red;
@@ -34,7 +34,7 @@ body.node-type-pet .views-field {
   font-size: 0.8em;
 }
 
-/* line 28, ../sass/style.sass */
+/* line 29, ../sass/style.sass */
 #block-motor-loggedin-user {
   text-align: right;
 }
