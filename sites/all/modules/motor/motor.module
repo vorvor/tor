@@ -14,7 +14,7 @@ function motor_menu() {
   $items['dashboard'] = array(
     'title' => 'Dashboard',
     'page callback' => 'motor_dashboard',
-    'access callback' => TRUE,
+    'access callback' => 'motor_search_owner_permission',
     'type' => MENU_NORMAL_ITEM,
     'menu_name' => 'main-menu',
   );
@@ -76,9 +76,7 @@ function motor_init() {
     drupal_add_css(drupal_get_path('module', 'motor') . '/css/motor_autocomplete.css');
   }
 
-
-
-  if ($path === '/dashboard') {
+  if ($path === '/dashboard' || $path === '/') {
     drupal_add_js(drupal_get_path('module', 'motor') . '/js/dashboard.js');
     $settings = array(
       'path' => drupal_get_path('module', 'motor'),
@@ -89,7 +87,12 @@ function motor_init() {
 }
 
 function motor_search_owner_permission() {
-  return TRUE;
+  global $user;
+  if ($user->uid > 0) {
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 function motor_search_node($search_phrase) {
@@ -127,6 +130,7 @@ function motor_form($form, &$form_state) {
 
   $form['search_phrase'] = array(
     '#title' => t('Search'),
+    '#description' => t('Search for owners and pets by tehir name, address, etc.'),
     '#type' => 'textfield',
   );
 
@@ -181,6 +185,11 @@ function motor_block_info() {
     'cache' => DRUPAL_NO_CACHE,
   );
 
+  $blocks['drug_on_stock'] = array(
+    'info' => t('Drug on stock'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
 
   return $blocks;
 }
@@ -191,9 +200,10 @@ function motor_block_view($delta = '') {
     case 'vaccinate':
       if (user_access('access content')) {
           $block['subject'] = t('Vaccinate');
-          $block['content'] = l('New vaccinate', '/node/add/event-vaccinate/' . arg(1), array(
+          $block['content'] = l(t('New vaccinate'), '/node/add/event-vaccinate/' . arg(1), array(
             'attributes' => array(
               'id' => 'vaccinate',
+              'class' => array('add-event'),
             ),
           )) . '<div id="former-vaccinates">' . views_embed_view('former_vaccinates', 'default', arg(1)) . '</div>';
       }
@@ -205,9 +215,10 @@ function motor_block_view($delta = '') {
     case 'treatment':
       if (user_access('access content')) {
           $block['subject'] = t('Treatment');
-          $block['content'] = l('New treatment', '/node/add/event-treatment/' . arg(1), array(
+          $block['content'] = l(t('New treatment'), '/node/add/event-treatment/' . arg(1), array(
             'attributes' => array(
               'id' => 'treatment',
+              'class' => array('add-event'),
             ),
           )) . '<div id="former-treatments">' . views_embed_view('former_treatments', 'default', arg(1)) . '</div>';
       }
@@ -218,7 +229,17 @@ function motor_block_view($delta = '') {
 
     case 'loggedin_user':
       global $user;
-      $block['content'] = $user->name . '(#' . $user->uid . ') ' . t('logged in');
+      $name = '';
+      if (isset($user->name)) {
+        $name = $user->name;
+      }
+      $block['content'] = $name . ' ' . '(#' . $user->uid . ') ' . t('logged in');
+    break;
+
+    case 'drug_on_stock':
+      $sum = motor_drug_stock_get(arg(1));
+      $block['content'] = t('On stock:') . $sum;
+      
     break;
   }
   return $block;
@@ -226,14 +247,18 @@ function motor_block_view($delta = '') {
 
 function motor_node_presave($node) {
   if ($node->type == 'event_treatment' || $node->type == 'event_vaccinate') {
-    $node->field_pet[LANGUAGE_NONE][0]['nid'] = arg(3);
+    if (!isset($node->field_pet[LANGUAGE_NONE][0]['nid'])) {
+      $node->field_pet[LANGUAGE_NONE][0]['nid'] = arg(3);
+    }
   }
 
   if ($node->type == 'event_treatment') {
-    $terms = explode(',', $node->field_anamnesis[LANGUAGE_NONE][0]['value']);
-    foreach ($terms as $term) {
-      $term = trim($term);
-      motor_save_new_term($term, 'treatments_anamnesis');
+    if (!empty($node->field_anamnesis[LANGUAGE_NONE])) {
+      $terms = explode(',', $node->field_anamnesis[LANGUAGE_NONE][0]['value']);
+      foreach ($terms as $term) {
+        $term = trim($term);
+        motor_save_new_term($term, 'treatments_anamnesis');
+      }
     }
   }
 }
@@ -270,7 +295,6 @@ function motor_save_new_term($termName, $vocabName) {
 }
 
 function motor_form_alter(&$form, &$form_state, $form_id) {
-  dpm($form_id);
 
   if ($form_id == 'event_treatment_node_form') {
     $treatment_vocabs = array(
@@ -287,6 +311,105 @@ function motor_form_alter(&$form, &$form_state, $form_id) {
         'data-voc' => $voc,
       );
     }
-    dpm($form);
+
+    $form['actions']['submit']['#submit'][] = 'motor_add_treatment_custom_submit';
+
   }
+}
+
+function motor_add_treatment_custom_submit($form, &$form_state) {
+  $nid = $form_state['values']['field_pet'][LANGUAGE_NONE][0]['nid'];
+  unset($_GET['destination']);
+  unset($_REQUEST['edit']['destination']); 
+  $form_state['redirect'] = '/node/' . $nid;
+}
+
+function motor_drug_stock_get($nid) {
+  $query = db_select('field_data_field_drug_qty', 'dq')
+  ->fields('dq', array('field_drug_qty_value'))
+  ->condition('dq.bundle', 'drug_supply');
+  $query->leftJoin('field_data_field_drug', 'd', 'd.entity_id = dq.entity_id');
+  $query->condition('d.field_drug_nid', $nid);
+
+  $results = $query
+  ->execute()
+  ->fetchAll();
+
+  $sum = 0;
+  foreach ($results as $row) {
+    $sum += $row->field_drug_qty_value;
+  }
+
+  $query = db_select('field_data_field_drug_qty', 'dq')
+  ->fields('dq', array('field_drug_qty_value'))
+  ->condition('dq.bundle', 'drugs_used');
+  $query->leftJoin('field_data_field_drug', 'd', 'd.entity_id = dq.entity_id');
+  $query->condition('d.field_drug_nid', $nid);
+
+  $results = $query
+  ->execute()
+  ->fetchAll();
+
+  foreach ($results as $row) {
+    $sum -= $row->field_drug_qty_value;
+  }
+
+  return $sum;
+}
+
+function motor_get_drugs_used_on_treatment($nid) {
+  $query = db_select('field_data_field_drugs_used', 'du')
+  ->fields('d', array('field_drug_nid'))
+  ->fields('dq', array('field_drug_qty_value'))
+  ->fields('dsp', array('field_selling_price_value'))
+  ->fields('dn', array('title'))
+  ->condition('dq.bundle', 'drugs_used');
+  $query->leftJoin('field_data_field_drug', 'd', 'd.entity_id = du.field_drugs_used_value');
+  $query->leftJoin('field_data_field_drug_qty', 'dq', 'dq.entity_id = du.field_drugs_used_value');
+  $query->leftJoin('field_data_field_selling_price', 'dsp', 'dsp.entity_id = d.field_drug_nid');
+  $query->leftJoin('node', 'dn', 'd.field_drug_nid = dn.nid');
+  $query->condition('du.entity_id', $nid);
+
+  $results = $query
+  ->execute()
+  ->fetchAll();
+
+  $output = [];
+  foreach ($results as $row) {
+    $sum_price = $row->field_selling_price_value * $row->field_drug_qty_value;
+    $output[] = $row->title . ': ' . $row->field_selling_price_value . 'HUF x ' . $row->field_drug_qty_value . ' - ' . $sum_price . 'HUF';
+  }
+
+  return '<div class="drugs-used-list">' . implode('<br />', $output) . '</div>';
+}
+
+function motor_calculate_treatment_sum_price($nid) {
+  $query = db_select('field_data_field_drugs_used', 'du')
+  ->fields('d', array('field_drug_nid'))
+  ->fields('dq', array('field_drug_qty_value'))
+  ->fields('dsp', array('field_selling_price_value'))
+  ->fields('dn', array('title'))
+  ->condition('dq.bundle', 'drugs_used');
+  $query->leftJoin('field_data_field_drug', 'd', 'd.entity_id = du.field_drugs_used_value');
+  $query->leftJoin('field_data_field_drug_qty', 'dq', 'dq.entity_id = du.field_drugs_used_value');
+  $query->leftJoin('field_data_field_selling_price', 'dsp', 'dsp.entity_id = d.field_drug_nid');
+  $query->leftJoin('node', 'dn', 'd.field_drug_nid = dn.nid');
+  $query->condition('du.entity_id', $nid);
+
+  $results = $query
+  ->execute()
+  ->fetchAll();
+
+  $sum = 0;
+  foreach ($results as $row) {
+    $sum += $row->field_selling_price_value * $row->field_drug_qty_value;
+  }
+
+  $treatment = node_load($nid);
+
+  if (isset($treatment->field_cost_of_treatment[LANGUAGE_NONE])) {
+    $sum += $treatment->field_cost_of_treatment[LANGUAGE_NONE][0]['value'];
+  }
+
+  return $sum;
 }

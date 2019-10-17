@@ -10,8 +10,6 @@
     		treatments_notes = Drupal.settings.treatments_notes;
     		treatments_operation = Drupal.settings.treatments_operation;
 
-    		console.log(Drupal.settings);
-
     		function split( val ) {
 		      return val.split( /,\s*/ );
 		    }
