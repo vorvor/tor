@@ -232,8 +232,13 @@ function motor_block_view($delta = '') {
       $name = '';
       if (isset($user->name)) {
         $name = $user->name;
+      
+
+        $block['content'] = t('@name (@userid) logged in', array(
+          '@name' => $name,
+          '@userid' => '#' . $user->uid,
+        ));
       }
-      $block['content'] = $name . ' ' . '(#' . $user->uid . ') ' . t('logged in');
     break;
 
     case 'drug_on_stock':
