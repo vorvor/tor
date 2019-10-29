@@ -64,13 +64,6 @@ function motor_init() {
       $terms = motor_taxonomy_terms_to_jsautocomplete($vocab);
       drupal_add_js($terms, 'setting');
     }
-    
-    $terms_complementary = motor_taxonomy_terms_to_jsautocomplete('treatments_complementary');
-    drupal_add_js($terms_complementary, 'setting');
-
-    $terms_notes = motor_taxonomy_terms_to_jsautocomplete('treatments_notes');
-    drupal_add_js($terms_notes, 'setting');
-
 
     drupal_add_js(drupal_get_path('module', 'motor') . '/js/motor_autocomplete.js');
     drupal_add_css(drupal_get_path('module', 'motor') . '/css/motor_autocomplete.css');
@@ -110,7 +103,7 @@ function motor_search_node($search_phrase) {
     if ($row->type == 'pet') {
       $query = db_select('field_data_field_pets', 'p')
       ->fields('p', array('entity_id'))
-      ->condition('p.field_pets_nid', $row->nid)
+      ->condition('p.field_pets_target_id', $row->nid)
       ->range(0,1);
 
       $results = $query
@@ -220,7 +213,7 @@ function motor_block_view($delta = '') {
               'id' => 'treatment',
               'class' => array('add-event'),
             ),
-          )) . '<div id="former-treatments">' . views_embed_view('former_treatments', 'default', arg(1)) . '</div>';
+          )) . '<div id="former-treatments">' . t('Former treatments') . views_embed_view('former_treatments', 'default', arg(1)) . '</div>';
       }
       else {
           $block['content'] = t('No content available.');
@@ -252,8 +245,9 @@ function motor_block_view($delta = '') {
 
 function motor_node_presave($node) {
   if ($node->type == 'event_treatment' || $node->type == 'event_vaccinate') {
-    if (!isset($node->field_pet[LANGUAGE_NONE][0]['nid'])) {
-      $node->field_pet[LANGUAGE_NONE][0]['nid'] = arg(3);
+    
+    if (!isset($node->field_pet[LANGUAGE_NONE][0]['target_id'])) {
+      $node->field_pet[LANGUAGE_NONE][0]['target_id'] = arg(3);
     }
   }
 
@@ -265,6 +259,10 @@ function motor_node_presave($node) {
         motor_save_new_term($term, 'treatments_anamnesis');
       }
     }
+  }
+
+  if ($node->type == 'pet') {
+    $node->title = str_replace(' 00:00:00', '', $node->title);
   }
 }
 
@@ -316,14 +314,27 @@ function motor_form_alter(&$form, &$form_state, $form_id) {
         'data-voc' => $voc,
       );
     }
+    $form['field_pet'][LANGUAGE_NONE]['#default_value'] = arg(3);
 
     $form['actions']['submit']['#submit'][] = 'motor_add_treatment_custom_submit';
 
   }
+
+  if ($form_id == 'event_vaccinate_node_form') {
+      $form['field_pet'][LANGUAGE_NONE]['#default_value'] = arg(3);
+      $form['actions']['submit']['#submit'][] = 'motor_add_treatment_custom_submit';
+
+    }
+
+
+  if ($form_id == 'owner_node_form') {
+    $form['#attached']['js'][] = drupal_get_path('module', 'motor') . '/js/embed-entity-autonodetitle.js';
+  }
 }
 
 function motor_add_treatment_custom_submit($form, &$form_state) {
-  $nid = $form_state['values']['field_pet'][LANGUAGE_NONE][0]['nid'];
+
+  $nid = $form_state['values']['field_pet'][LANGUAGE_NONE][0]['target_id'];
   unset($_GET['destination']);
   unset($_REQUEST['edit']['destination']); 
   $form_state['redirect'] = '/node/' . $nid;
@@ -334,7 +345,7 @@ function motor_drug_stock_get($nid) {
   ->fields('dq', array('field_drug_qty_value'))
   ->condition('dq.bundle', 'drug_supply');
   $query->leftJoin('field_data_field_drug', 'd', 'd.entity_id = dq.entity_id');
-  $query->condition('d.field_drug_nid', $nid);
+  $query->condition('d.field_drug_target_id', $nid);
 
   $results = $query
   ->execute()
@@ -349,7 +360,7 @@ function motor_drug_stock_get($nid) {
   ->fields('dq', array('field_drug_qty_value'))
   ->condition('dq.bundle', 'drugs_used');
   $query->leftJoin('field_data_field_drug', 'd', 'd.entity_id = dq.entity_id');
-  $query->condition('d.field_drug_nid', $nid);
+  $query->condition('d.field_drug_target_id', $nid);
 
   $results = $query
   ->execute()
@@ -364,15 +375,15 @@ function motor_drug_stock_get($nid) {
 
 function motor_get_drugs_used_on_treatment($nid) {
   $query = db_select('field_data_field_drugs_used', 'du')
-  ->fields('d', array('field_drug_nid'))
+  ->fields('d', array('field_drug_target_id'))
   ->fields('dq', array('field_drug_qty_value'))
   ->fields('dsp', array('field_selling_price_value'))
   ->fields('dn', array('title'))
   ->condition('dq.bundle', 'drugs_used');
   $query->leftJoin('field_data_field_drug', 'd', 'd.entity_id = du.field_drugs_used_value');
   $query->leftJoin('field_data_field_drug_qty', 'dq', 'dq.entity_id = du.field_drugs_used_value');
-  $query->leftJoin('field_data_field_selling_price', 'dsp', 'dsp.entity_id = d.field_drug_nid');
-  $query->leftJoin('node', 'dn', 'd.field_drug_nid = dn.nid');
+  $query->leftJoin('field_data_field_selling_price', 'dsp', 'dsp.entity_id = d.field_drug_target_id');
+  $query->leftJoin('node', 'dn', 'd.field_drug_target_id = dn.nid');
   $query->condition('du.entity_id', $nid);
 
   $results = $query
@@ -390,15 +401,15 @@ function motor_get_drugs_used_on_treatment($nid) {
 
 function motor_calculate_treatment_sum_price($nid) {
   $query = db_select('field_data_field_drugs_used', 'du')
-  ->fields('d', array('field_drug_nid'))
+  ->fields('d', array('field_drug_target_id'))
   ->fields('dq', array('field_drug_qty_value'))
   ->fields('dsp', array('field_selling_price_value'))
   ->fields('dn', array('title'))
   ->condition('dq.bundle', 'drugs_used');
   $query->leftJoin('field_data_field_drug', 'd', 'd.entity_id = du.field_drugs_used_value');
   $query->leftJoin('field_data_field_drug_qty', 'dq', 'dq.entity_id = du.field_drugs_used_value');
-  $query->leftJoin('field_data_field_selling_price', 'dsp', 'dsp.entity_id = d.field_drug_nid');
-  $query->leftJoin('node', 'dn', 'd.field_drug_nid = dn.nid');
+  $query->leftJoin('field_data_field_selling_price', 'dsp', 'dsp.entity_id = d.field_drug_target_id');
+  $query->leftJoin('node', 'dn', 'd.entity_id = dn.nid');
   $query->condition('du.entity_id', $nid);
 
   $results = $query

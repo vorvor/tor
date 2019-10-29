@@ -109,6 +109,36 @@ function tor_base_field_default_field_bases() {
     'type' => 'number_integer',
   );
 
+  // Exported field_base: 'field_date_of_birth'.
+  $field_bases['field_date_of_birth'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_date_of_birth',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'date',
+    'settings' => array(
+      'cache_count' => 4,
+      'cache_enabled' => 0,
+      'entity_translation_sync' => FALSE,
+      'granularity' => array(
+        'day' => 'day',
+        'hour' => 0,
+        'minute' => 0,
+        'month' => 'month',
+        'second' => 0,
+        'year' => 'year',
+      ),
+      'timezone_db' => '',
+      'todate' => '',
+      'tz_handling' => 'none',
+    ),
+    'translatable' => 0,
+    'type' => 'datetime',
+  );
+
   // Exported field_base: 'field_diagnosis'.
   $field_bases['field_diagnosis'] = array(
     'active' => 1,
@@ -138,32 +168,31 @@ function tor_base_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_drug',
     'indexes' => array(
-      'nid' => array(
-        0 => 'nid',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'node_reference',
+    'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'referenceable_types' => array(
-        'article' => 0,
-        'drug' => 'drug',
-        'drug_supply' => 0,
-        'event_treatment' => 0,
-        'event_vaccinate' => 0,
-        'owner' => 0,
-        'page' => 0,
-        'pet' => 0,
+      'handler' => 'views',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'view' => array(
+          'args' => array(),
+          'display_name' => 'entityreference_4',
+          'view_name' => 'drugs',
+        ),
       ),
-      'view' => array(
-        'args' => array(),
-        'display_name' => '',
-        'view_name' => '',
-      ),
+      'target_type' => 'node',
     ),
     'translatable' => 0,
-    'type' => 'node_reference',
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_drug_amount'.
@@ -213,28 +242,37 @@ function tor_base_field_default_field_bases() {
   // Exported field_base: 'field_drug_set'.
   $field_bases['field_drug_set'] = array(
     'active' => 1,
-    'cardinality' => 3,
+    'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_drug_set',
     'indexes' => array(
-      'tid' => array(
-        0 => 'tid',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'taxonomy',
+    'module' => 'entityreference',
     'settings' => array(
-      'allowed_values' => array(
-        0 => array(
-          'vocabulary' => 'drug_set',
-          'parent' => 0,
+      'entity_translation_sync' => FALSE,
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'drug_set' => 'drug_set',
         ),
       ),
-      'entity_translation_sync' => FALSE,
+      'target_type' => 'taxonomy_term',
     ),
     'translatable' => 0,
-    'type' => 'taxonomy_term_reference',
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_drug_subtype'.
@@ -245,50 +283,104 @@ function tor_base_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_drug_subtype',
     'indexes' => array(
-      'tid' => array(
-        0 => 'tid',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'taxonomy',
+    'module' => 'entityreference',
     'settings' => array(
-      'allowed_values' => array(
-        0 => array(
-          'vocabulary' => 'drug_subtype',
-          'parent' => 0,
+      'entity_translation_sync' => FALSE,
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'drug_subtype' => 'drug_subtype',
         ),
       ),
-      'entity_translation_sync' => FALSE,
+      'target_type' => 'taxonomy_term',
     ),
     'translatable' => 0,
-    'type' => 'taxonomy_term_reference',
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_drug_type'.
   $field_bases['field_drug_type'] = array(
     'active' => 1,
-    'cardinality' => -1,
+    'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_drug_type',
     'indexes' => array(
-      'tid' => array(
-        0 => 'tid',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'taxonomy',
+    'module' => 'entityreference',
     'settings' => array(
-      'allowed_values' => array(
-        0 => array(
-          'vocabulary' => 'drug_types',
-          'parent' => 0,
+      'entity_translation_sync' => FALSE,
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'drug_types' => 'drug_types',
         ),
       ),
-      'entity_translation_sync' => FALSE,
+      'target_type' => 'taxonomy_term',
     ),
     'translatable' => 0,
-    'type' => 'taxonomy_term_reference',
+    'type' => 'entityreference',
+  );
+
+  // Exported field_base: 'field_drugs'.
+  $field_bases['field_drugs'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_drugs',
+    'indexes' => array(
+      'target_id' => array(
+        0 => 'target_id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'entityreference',
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'drug' => 'drug',
+        ),
+      ),
+      'target_type' => 'node',
+    ),
+    'translatable' => 0,
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_drugs_used'.
@@ -463,63 +555,68 @@ function tor_base_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_pet',
     'indexes' => array(
-      'nid' => array(
-        0 => 'nid',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'node_reference',
+    'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'referenceable_types' => array(
-        'article' => 0,
-        'drug' => 0,
-        'event_treatment' => 0,
-        'event_vaccinate' => 0,
-        'owner' => 0,
-        'page' => 0,
-        'pet' => 'pet',
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'pet' => 'pet',
+        ),
       ),
-      'view' => array(
-        'args' => array(),
-        'display_name' => '',
-        'view_name' => '',
-      ),
+      'target_type' => 'node',
     ),
     'translatable' => 0,
-    'type' => 'node_reference',
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_pets'.
   $field_bases['field_pets'] = array(
     'active' => 1,
-    'cardinality' => 5,
+    'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_pets',
     'indexes' => array(
-      'nid' => array(
-        0 => 'nid',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'node_reference',
+    'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'referenceable_types' => array(
-        'article' => 0,
-        'owner' => 0,
-        'page' => 0,
-        'pet' => 'pet',
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'pet' => 'pet',
+        ),
       ),
-      'view' => array(
-        'args' => array(),
-        'display_name' => '',
-        'view_name' => '',
-      ),
+      'target_type' => 'node',
     ),
     'translatable' => 0,
-    'type' => 'node_reference',
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_phone'.
@@ -621,23 +718,32 @@ function tor_base_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_species',
     'indexes' => array(
-      'tid' => array(
-        0 => 'tid',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'taxonomy',
+    'module' => 'entityreference',
     'settings' => array(
-      'allowed_values' => array(
-        0 => array(
-          'vocabulary' => 'species',
-          'parent' => 0,
+      'entity_translation_sync' => FALSE,
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'species' => 'species',
         ),
       ),
-      'entity_translation_sync' => FALSE,
+      'target_type' => 'taxonomy_term',
     ),
     'translatable' => 0,
-    'type' => 'taxonomy_term_reference',
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_treatment_closed'.
@@ -674,30 +780,31 @@ function tor_base_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_vaccinate_flea_killer',
     'indexes' => array(
-      'nid' => array(
-        0 => 'nid',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'node_reference',
+    'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'referenceable_types' => array(
-        'article' => 0,
-        'drug' => 'drug',
-        'event_vaccinate' => 0,
-        'owner' => 0,
-        'page' => 0,
-        'pet' => 0,
+      'handler' => 'views',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'view' => array(
+          'args' => array(),
+          'display_name' => 'entityreference_1',
+          'view_name' => 'drugs',
+        ),
       ),
-      'view' => array(
-        'args' => array(),
-        'display_name' => 'references_1',
-        'view_name' => 'drugs',
-      ),
+      'target_type' => 'node',
     ),
     'translatable' => 0,
-    'type' => 'node_reference',
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_vaccinate_flea_killer_qty'.
@@ -725,30 +832,31 @@ function tor_base_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_vaccinate_rabies',
     'indexes' => array(
-      'nid' => array(
-        0 => 'nid',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'node_reference',
+    'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'referenceable_types' => array(
-        'article' => 0,
-        'drug' => 'drug',
-        'event_vaccinate' => 0,
-        'owner' => 0,
-        'page' => 0,
-        'pet' => 0,
+      'handler' => 'views',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'view' => array(
+          'args' => array(),
+          'display_name' => 'entityreference_2',
+          'view_name' => 'drugs',
+        ),
       ),
-      'view' => array(
-        'args' => array(),
-        'display_name' => 'references_2',
-        'view_name' => 'drugs',
-      ),
+      'target_type' => 'node',
     ),
     'translatable' => 0,
-    'type' => 'node_reference',
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_vaccinate_rabies_qty'.
@@ -776,30 +884,31 @@ function tor_base_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_vaccinate_worming',
     'indexes' => array(
-      'nid' => array(
-        0 => 'nid',
+      'target_id' => array(
+        0 => 'target_id',
       ),
     ),
     'locked' => 0,
-    'module' => 'node_reference',
+    'module' => 'entityreference',
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'referenceable_types' => array(
-        'article' => 0,
-        'drug' => 'drug',
-        'event_vaccinate' => 0,
-        'owner' => 0,
-        'page' => 0,
-        'pet' => 0,
+      'handler' => 'views',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'view' => array(
+          'args' => array(),
+          'display_name' => 'entityreference_3',
+          'view_name' => 'drugs',
+        ),
       ),
-      'view' => array(
-        'args' => array(),
-        'display_name' => 'references_3',
-        'view_name' => 'drugs',
-      ),
+      'target_type' => 'node',
     ),
     'translatable' => 0,
-    'type' => 'node_reference',
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_vaccinate_worming_qty'.

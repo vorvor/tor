@@ -115,6 +115,10 @@ function tor_base_views_default_views() {
   $handler->display->display_options['fields']['field_pets']['field'] = 'field_pets';
   $handler->display->display_options['fields']['field_pets']['label'] = '';
   $handler->display->display_options['fields']['field_pets']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_pets']['click_sort_column'] = 'nid';
+  $handler->display->display_options['fields']['field_pets']['type'] = 'node_reference_default';
+  $handler->display->display_options['fields']['field_pets']['group_column'] = 'nid';
+  $handler->display->display_options['fields']['field_pets']['delta_limit'] = '5';
   $handler->display->display_options['fields']['field_pets']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_pets']['separator'] = ' | ';
   /* Sort criterion: Content: Post date */
@@ -123,15 +127,15 @@ function tor_base_views_default_views() {
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
   /* Contextual filter: Content: Pets (field_pets) */
-  $handler->display->display_options['arguments']['field_pets_nid']['id'] = 'field_pets_nid';
-  $handler->display->display_options['arguments']['field_pets_nid']['table'] = 'field_data_field_pets';
-  $handler->display->display_options['arguments']['field_pets_nid']['field'] = 'field_pets_nid';
-  $handler->display->display_options['arguments']['field_pets_nid']['default_action'] = 'default';
-  $handler->display->display_options['arguments']['field_pets_nid']['default_argument_type'] = 'raw';
-  $handler->display->display_options['arguments']['field_pets_nid']['default_argument_options']['index'] = '3';
-  $handler->display->display_options['arguments']['field_pets_nid']['summary']['number_of_records'] = '0';
-  $handler->display->display_options['arguments']['field_pets_nid']['summary']['format'] = 'default_summary';
-  $handler->display->display_options['arguments']['field_pets_nid']['summary_options']['items_per_page'] = '25';
+  $handler->display->display_options['arguments']['field_pets_target_id']['id'] = 'field_pets_target_id';
+  $handler->display->display_options['arguments']['field_pets_target_id']['table'] = 'field_data_field_pets';
+  $handler->display->display_options['arguments']['field_pets_target_id']['field'] = 'field_pets_target_id';
+  $handler->display->display_options['arguments']['field_pets_target_id']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['field_pets_target_id']['default_argument_type'] = 'raw';
+  $handler->display->display_options['arguments']['field_pets_target_id']['default_argument_options']['index'] = '3';
+  $handler->display->display_options['arguments']['field_pets_target_id']['summary']['number_of_records'] = '0';
+  $handler->display->display_options['arguments']['field_pets_target_id']['summary']['format'] = 'default_summary';
+  $handler->display->display_options['arguments']['field_pets_target_id']['summary_options']['items_per_page'] = '25';
   /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
@@ -200,6 +204,7 @@ function tor_base_views_default_views() {
   $handler->display->display_options['fields']['field_species']['field'] = 'field_species';
   $handler->display->display_options['fields']['field_species']['label'] = '';
   $handler->display->display_options['fields']['field_species']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_species']['click_sort_column'] = 'tid';
   $handler->display->display_options['fields']['field_species']['type'] = 'hierarchical_term_formatter';
   $handler->display->display_options['fields']['field_species']['settings'] = array(
     'display' => 'all',
@@ -207,6 +212,7 @@ function tor_base_views_default_views() {
     'wrap' => 'none',
     'separator' => ' » ',
   );
+  $handler->display->display_options['fields']['field_species']['group_column'] = 'tid';
   /* Field: Content: Chip ID */
   $handler->display->display_options['fields']['field_chip_id']['id'] = 'field_chip_id';
   $handler->display->display_options['fields']['field_chip_id']['table'] = 'field_data_field_chip_id';
@@ -313,6 +319,9 @@ function tor_base_views_default_views() {
   $handler->display->display_options['fields']['field_drug_type']['field'] = 'field_drug_type';
   $handler->display->display_options['fields']['field_drug_type']['label'] = '';
   $handler->display->display_options['fields']['field_drug_type']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_drug_type']['click_sort_column'] = 'tid';
+  $handler->display->display_options['fields']['field_drug_type']['type'] = 'taxonomy_term_reference_link';
+  $handler->display->display_options['fields']['field_drug_type']['group_column'] = 'tid';
   /* Field: Content: Selling price */
   $handler->display->display_options['fields']['field_selling_price']['id'] = 'field_selling_price';
   $handler->display->display_options['fields']['field_selling_price']['table'] = 'field_data_field_selling_price';
@@ -383,7 +392,10 @@ function tor_base_views_default_views() {
   $handler->display->display_options['fields']['field_drug_set']['field'] = 'field_drug_set';
   $handler->display->display_options['fields']['field_drug_set']['label'] = '';
   $handler->display->display_options['fields']['field_drug_set']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_drug_set']['click_sort_column'] = 'tid';
   $handler->display->display_options['fields']['field_drug_set']['type'] = 'taxonomy_term_reference_plain';
+  $handler->display->display_options['fields']['field_drug_set']['group_column'] = 'tid';
+  $handler->display->display_options['fields']['field_drug_set']['delta_limit'] = '3';
   $handler->display->display_options['fields']['field_drug_set']['delta_offset'] = '0';
   /* Field: Content: Drug type */
   $handler->display->display_options['fields']['field_drug_type']['id'] = 'field_drug_type';
@@ -391,7 +403,9 @@ function tor_base_views_default_views() {
   $handler->display->display_options['fields']['field_drug_type']['field'] = 'field_drug_type';
   $handler->display->display_options['fields']['field_drug_type']['label'] = '';
   $handler->display->display_options['fields']['field_drug_type']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_drug_type']['click_sort_column'] = 'tid';
   $handler->display->display_options['fields']['field_drug_type']['type'] = 'taxonomy_term_reference_plain';
+  $handler->display->display_options['fields']['field_drug_type']['group_column'] = 'tid';
   $handler->display->display_options['fields']['field_drug_type']['delta_offset'] = '0';
   /* Field: Content: Selling price */
   $handler->display->display_options['fields']['field_selling_price']['id'] = 'field_selling_price';
@@ -426,16 +440,22 @@ print motor_drug_stock_get($row->nid);
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
 
-  /* Display: References Flea/tick killer */
-  $handler = $view->new_display('references', 'References Flea/tick killer', 'references_1');
+  /* Display: Entity Reference flea tick killer */
+  $handler = $view->new_display('entityreference', 'Entity Reference flea tick killer', 'entityreference_1');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Flea/tick killer';
   $handler->display->display_options['pager']['type'] = 'some';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
-  $handler->display->display_options['style_plugin'] = 'references_style';
+  $handler->display->display_options['style_plugin'] = 'entityreference_style';
+  $handler->display->display_options['style_options']['search_fields'] = array(
+    'title' => 'title',
+    'nid' => 0,
+    'field_drug_type' => 0,
+    'field_selling_price' => 0,
+    'edit_node' => 0,
+  );
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
-  $handler->display->display_options['row_plugin'] = 'references_fields';
+  $handler->display->display_options['row_plugin'] = 'entityreference_fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
@@ -453,26 +473,44 @@ print motor_drug_stock_get($row->nid);
   $handler->display->display_options['filters']['type']['value'] = array(
     'drug' => 'drug',
   );
-  /* Filter criterion: Content: Drug type (field_drug_type) */
+  /* Filter criterion: Content: Title */
+  $handler->display->display_options['filters']['title']['id'] = 'title';
+  $handler->display->display_options['filters']['title']['table'] = 'node';
+  $handler->display->display_options['filters']['title']['field'] = 'title';
+  $handler->display->display_options['filters']['title']['operator'] = 'word';
+  $handler->display->display_options['filters']['title']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['label'] = 'Search title';
+  $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
+  $handler->display->display_options['filters']['title']['expose']['remember_roles'] = array(
+    2 => '2',
+  );
+  /* Filter criterion: Broken/missing handler */
   $handler->display->display_options['filters']['field_drug_type_tid']['id'] = 'field_drug_type_tid';
   $handler->display->display_options['filters']['field_drug_type_tid']['table'] = 'field_data_field_drug_type';
   $handler->display->display_options['filters']['field_drug_type_tid']['field'] = 'field_drug_type_tid';
+  $handler->display->display_options['filters']['field_drug_type_tid']['operator'] = 'or';
   $handler->display->display_options['filters']['field_drug_type_tid']['value'] = array(
     10 => '10',
   );
-  $handler->display->display_options['filters']['field_drug_type_tid']['type'] = 'select';
-  $handler->display->display_options['filters']['field_drug_type_tid']['vocabulary'] = 'drug_types';
 
-  /* Display: References Rabies */
-  $handler = $view->new_display('references', 'References Rabies', 'references_2');
+  /* Display: Entity Reference rabies */
+  $handler = $view->new_display('entityreference', 'Entity Reference rabies', 'entityreference_2');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Rabies';
   $handler->display->display_options['pager']['type'] = 'some';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
-  $handler->display->display_options['style_plugin'] = 'references_style';
+  $handler->display->display_options['style_plugin'] = 'entityreference_style';
+  $handler->display->display_options['style_options']['search_fields'] = array(
+    'title' => 'title',
+    'nid' => 0,
+    'field_drug_type' => 0,
+    'field_selling_price' => 0,
+    'edit_node' => 0,
+  );
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
-  $handler->display->display_options['row_plugin'] = 'references_fields';
+  $handler->display->display_options['row_plugin'] = 'entityreference_fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
@@ -490,26 +528,44 @@ print motor_drug_stock_get($row->nid);
   $handler->display->display_options['filters']['type']['value'] = array(
     'drug' => 'drug',
   );
-  /* Filter criterion: Content: Drug type (field_drug_type) */
+  /* Filter criterion: Content: Title */
+  $handler->display->display_options['filters']['title']['id'] = 'title';
+  $handler->display->display_options['filters']['title']['table'] = 'node';
+  $handler->display->display_options['filters']['title']['field'] = 'title';
+  $handler->display->display_options['filters']['title']['operator'] = 'word';
+  $handler->display->display_options['filters']['title']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['label'] = 'Search title';
+  $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
+  $handler->display->display_options['filters']['title']['expose']['remember_roles'] = array(
+    2 => '2',
+  );
+  /* Filter criterion: Broken/missing handler */
   $handler->display->display_options['filters']['field_drug_type_tid']['id'] = 'field_drug_type_tid';
   $handler->display->display_options['filters']['field_drug_type_tid']['table'] = 'field_data_field_drug_type';
   $handler->display->display_options['filters']['field_drug_type_tid']['field'] = 'field_drug_type_tid';
+  $handler->display->display_options['filters']['field_drug_type_tid']['operator'] = 'or';
   $handler->display->display_options['filters']['field_drug_type_tid']['value'] = array(
     8 => '8',
   );
-  $handler->display->display_options['filters']['field_drug_type_tid']['type'] = 'select';
-  $handler->display->display_options['filters']['field_drug_type_tid']['vocabulary'] = 'drug_types';
 
-  /* Display: References Worming */
-  $handler = $view->new_display('references', 'References Worming', 'references_3');
+  /* Display: Entity Reference worming */
+  $handler = $view->new_display('entityreference', 'Entity Reference worming', 'entityreference_3');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Worming';
   $handler->display->display_options['pager']['type'] = 'some';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
-  $handler->display->display_options['style_plugin'] = 'references_style';
+  $handler->display->display_options['style_plugin'] = 'entityreference_style';
+  $handler->display->display_options['style_options']['search_fields'] = array(
+    'title' => 'title',
+    'nid' => 0,
+    'field_drug_type' => 0,
+    'field_selling_price' => 0,
+    'edit_node' => 0,
+  );
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
-  $handler->display->display_options['row_plugin'] = 'references_fields';
+  $handler->display->display_options['row_plugin'] = 'entityreference_fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
@@ -527,26 +583,44 @@ print motor_drug_stock_get($row->nid);
   $handler->display->display_options['filters']['type']['value'] = array(
     'drug' => 'drug',
   );
-  /* Filter criterion: Content: Drug type (field_drug_type) */
+  /* Filter criterion: Content: Title */
+  $handler->display->display_options['filters']['title']['id'] = 'title';
+  $handler->display->display_options['filters']['title']['table'] = 'node';
+  $handler->display->display_options['filters']['title']['field'] = 'title';
+  $handler->display->display_options['filters']['title']['operator'] = 'word';
+  $handler->display->display_options['filters']['title']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['label'] = 'Search title';
+  $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
+  $handler->display->display_options['filters']['title']['expose']['remember_roles'] = array(
+    2 => '2',
+  );
+  /* Filter criterion: Broken/missing handler */
   $handler->display->display_options['filters']['field_drug_type_tid']['id'] = 'field_drug_type_tid';
   $handler->display->display_options['filters']['field_drug_type_tid']['table'] = 'field_data_field_drug_type';
   $handler->display->display_options['filters']['field_drug_type_tid']['field'] = 'field_drug_type_tid';
+  $handler->display->display_options['filters']['field_drug_type_tid']['operator'] = 'or';
   $handler->display->display_options['filters']['field_drug_type_tid']['value'] = array(
     9 => '9',
   );
-  $handler->display->display_options['filters']['field_drug_type_tid']['type'] = 'select';
-  $handler->display->display_options['filters']['field_drug_type_tid']['vocabulary'] = 'drug_types';
 
-  /* Display: References Other */
-  $handler = $view->new_display('references', 'References Other', 'references_4');
+  /* Display: Entity Reference other */
+  $handler = $view->new_display('entityreference', 'Entity Reference other', 'entityreference_4');
   $handler->display->display_options['defaults']['title'] = FALSE;
-  $handler->display->display_options['title'] = 'Other drugs';
   $handler->display->display_options['pager']['type'] = 'some';
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
-  $handler->display->display_options['style_plugin'] = 'references_style';
+  $handler->display->display_options['style_plugin'] = 'entityreference_style';
+  $handler->display->display_options['style_options']['search_fields'] = array(
+    'title' => 'title',
+    'nid' => 0,
+    'field_drug_type' => 0,
+    'field_selling_price' => 0,
+    'edit_node' => 0,
+  );
   $handler->display->display_options['defaults']['style_options'] = FALSE;
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
-  $handler->display->display_options['row_plugin'] = 'references_fields';
+  $handler->display->display_options['row_plugin'] = 'entityreference_fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
@@ -564,16 +638,29 @@ print motor_drug_stock_get($row->nid);
   $handler->display->display_options['filters']['type']['value'] = array(
     'drug' => 'drug',
   );
-  /* Filter criterion: Content: Drug type (field_drug_type) */
+  /* Filter criterion: Content: Title */
+  $handler->display->display_options['filters']['title']['id'] = 'title';
+  $handler->display->display_options['filters']['title']['table'] = 'node';
+  $handler->display->display_options['filters']['title']['field'] = 'title';
+  $handler->display->display_options['filters']['title']['operator'] = 'word';
+  $handler->display->display_options['filters']['title']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['label'] = 'Search title';
+  $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
+  $handler->display->display_options['filters']['title']['expose']['remember_roles'] = array(
+    2 => '2',
+  );
+  /* Filter criterion: Broken/missing handler */
   $handler->display->display_options['filters']['field_drug_type_tid']['id'] = 'field_drug_type_tid';
   $handler->display->display_options['filters']['field_drug_type_tid']['table'] = 'field_data_field_drug_type';
   $handler->display->display_options['filters']['field_drug_type_tid']['field'] = 'field_drug_type_tid';
-  $handler->display->display_options['filters']['field_drug_type_tid']['operator'] = 'empty';
+  $handler->display->display_options['filters']['field_drug_type_tid']['operator'] = 'not';
   $handler->display->display_options['filters']['field_drug_type_tid']['value'] = array(
     10 => '10',
+    8 => '8',
+    9 => '9',
   );
-  $handler->display->display_options['filters']['field_drug_type_tid']['type'] = 'select';
-  $handler->display->display_options['filters']['field_drug_type_tid']['vocabulary'] = 'drug_types';
   $translatables['drugs'] = array(
     t('Master'),
     t('Drugs'),
@@ -594,14 +681,10 @@ print motor_drug_stock_get($row->nid);
     t('Search title'),
     t('Page'),
     t('On stock'),
-    t('References Flea/tick killer'),
-    t('Flea/tick killer'),
-    t('References Rabies'),
-    t('Rabies'),
-    t('References Worming'),
-    t('Worming'),
-    t('References Other'),
-    t('Other drugs'),
+    t('Entity Reference flea tick killer'),
+    t('Entity Reference rabies'),
+    t('Entity Reference worming'),
+    t('Entity Reference other'),
   );
   $export['drugs'] = $view;
 
@@ -709,7 +792,7 @@ print motor_calculate_treatment_sum_price($row->nid) . \'HUF\';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Contextual filter: Content: Pet (field_pet) */
+  /* Contextual filter: Broken/missing handler */
   $handler->display->display_options['arguments']['field_pet_nid']['id'] = 'field_pet_nid';
   $handler->display->display_options['arguments']['field_pet_nid']['table'] = 'field_data_field_pet';
   $handler->display->display_options['arguments']['field_pet_nid']['field'] = 'field_pet_nid';
@@ -854,7 +937,9 @@ print motor_calculate_treatment_sum_price($row->nid) . \'HUF\';
   $handler->display->display_options['fields']['field_vaccinate_flea_killer']['id'] = 'field_vaccinate_flea_killer';
   $handler->display->display_options['fields']['field_vaccinate_flea_killer']['table'] = 'field_data_field_vaccinate_flea_killer';
   $handler->display->display_options['fields']['field_vaccinate_flea_killer']['field'] = 'field_vaccinate_flea_killer';
+  $handler->display->display_options['fields']['field_vaccinate_flea_killer']['click_sort_column'] = 'nid';
   $handler->display->display_options['fields']['field_vaccinate_flea_killer']['type'] = 'node_reference_plain';
+  $handler->display->display_options['fields']['field_vaccinate_flea_killer']['group_column'] = 'nid';
   /* Field: Content: Vaccinate flea killer qty */
   $handler->display->display_options['fields']['field_vaccinate_flea_killer_qty']['id'] = 'field_vaccinate_flea_killer_qty';
   $handler->display->display_options['fields']['field_vaccinate_flea_killer_qty']['table'] = 'field_data_field_vaccinate_flea_killer_qty';
@@ -870,7 +955,9 @@ print motor_calculate_treatment_sum_price($row->nid) . \'HUF\';
   $handler->display->display_options['fields']['field_vaccinate_rabies']['id'] = 'field_vaccinate_rabies';
   $handler->display->display_options['fields']['field_vaccinate_rabies']['table'] = 'field_data_field_vaccinate_rabies';
   $handler->display->display_options['fields']['field_vaccinate_rabies']['field'] = 'field_vaccinate_rabies';
+  $handler->display->display_options['fields']['field_vaccinate_rabies']['click_sort_column'] = 'nid';
   $handler->display->display_options['fields']['field_vaccinate_rabies']['type'] = 'node_reference_plain';
+  $handler->display->display_options['fields']['field_vaccinate_rabies']['group_column'] = 'nid';
   /* Field: Content: Vaccinate rabies qty */
   $handler->display->display_options['fields']['field_vaccinate_rabies_qty']['id'] = 'field_vaccinate_rabies_qty';
   $handler->display->display_options['fields']['field_vaccinate_rabies_qty']['table'] = 'field_data_field_vaccinate_rabies_qty';
@@ -886,7 +973,9 @@ print motor_calculate_treatment_sum_price($row->nid) . \'HUF\';
   $handler->display->display_options['fields']['field_vaccinate_worming']['id'] = 'field_vaccinate_worming';
   $handler->display->display_options['fields']['field_vaccinate_worming']['table'] = 'field_data_field_vaccinate_worming';
   $handler->display->display_options['fields']['field_vaccinate_worming']['field'] = 'field_vaccinate_worming';
+  $handler->display->display_options['fields']['field_vaccinate_worming']['click_sort_column'] = 'nid';
   $handler->display->display_options['fields']['field_vaccinate_worming']['type'] = 'node_reference_plain';
+  $handler->display->display_options['fields']['field_vaccinate_worming']['group_column'] = 'nid';
   /* Field: Content: Vaccinate worming qty */
   $handler->display->display_options['fields']['field_vaccinate_worming_qty']['id'] = 'field_vaccinate_worming_qty';
   $handler->display->display_options['fields']['field_vaccinate_worming_qty']['table'] = 'field_data_field_vaccinate_worming_qty';
@@ -903,7 +992,7 @@ print motor_calculate_treatment_sum_price($row->nid) . \'HUF\';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
   $handler->display->display_options['sorts']['created']['order'] = 'DESC';
-  /* Contextual filter: Content: Pet (field_pet) */
+  /* Contextual filter: Broken/missing handler */
   $handler->display->display_options['arguments']['field_pet_nid']['id'] = 'field_pet_nid';
   $handler->display->display_options['arguments']['field_pet_nid']['table'] = 'field_data_field_pet';
   $handler->display->display_options['arguments']['field_pet_nid']['field'] = 'field_pet_nid';
@@ -1021,6 +1110,10 @@ print motor_calculate_treatment_sum_price($row->nid) . \'HUF\';
       'empty_column' => 0,
     ),
   );
+  /* Relationship: Entity Reference: Referenced Entity */
+  $handler->display->display_options['relationships']['field_pets_target_id']['id'] = 'field_pets_target_id';
+  $handler->display->display_options['relationships']['field_pets_target_id']['table'] = 'field_data_field_pets';
+  $handler->display->display_options['relationships']['field_pets_target_id']['field'] = 'field_pets_target_id';
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
@@ -1043,9 +1136,23 @@ print motor_calculate_treatment_sum_price($row->nid) . \'HUF\';
   $handler->display->display_options['fields']['field_pets']['table'] = 'field_data_field_pets';
   $handler->display->display_options['fields']['field_pets']['field'] = 'field_pets';
   $handler->display->display_options['fields']['field_pets']['label'] = '';
+  $handler->display->display_options['fields']['field_pets']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_pets']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_pets']['type'] = 'entityreference_entity_view';
+  $handler->display->display_options['fields']['field_pets']['settings'] = array(
+    'view_mode' => 'teaser',
+    'links' => 0,
+    'use_content_language' => 0,
+  );
+  $handler->display->display_options['fields']['field_pets']['group_column'] = 'nid';
+  $handler->display->display_options['fields']['field_pets']['delta_limit'] = '5';
   $handler->display->display_options['fields']['field_pets']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_pets']['multi_type'] = 'ul';
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title_1']['id'] = 'title_1';
+  $handler->display->display_options['fields']['title_1']['table'] = 'node';
+  $handler->display->display_options['fields']['title_1']['field'] = 'title';
+  $handler->display->display_options['fields']['title_1']['relationship'] = 'field_pets_target_id';
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -1116,7 +1223,9 @@ print motor_calculate_treatment_sum_price($row->nid) . \'HUF\';
     t('‹ previous'),
     t('next ›'),
     t('last »'),
+    t('Content entity referenced from field_pets'),
     t('#[nid]'),
+    t('Title'),
     t('All'),
     t('Page'),
   );
@@ -1157,11 +1266,11 @@ print motor_calculate_treatment_sum_price($row->nid) . \'HUF\';
       'empty_column' => 0,
     ),
   );
-  /* Relationship: Content: Pets (field_pets) */
+  /* Relationship: Broken/missing handler */
   $handler->display->display_options['relationships']['field_pets_nid']['id'] = 'field_pets_nid';
   $handler->display->display_options['relationships']['field_pets_nid']['table'] = 'field_data_field_pets';
   $handler->display->display_options['relationships']['field_pets_nid']['field'] = 'field_pets_nid';
-  $handler->display->display_options['relationships']['field_pets_nid']['delta'] = '-1';
+  $handler->display->display_options['relationships']['field_pets_nid']['label'] = 'field_pets';
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';

@@ -24,7 +24,6 @@
     					setTimeout(function() {
     						$('#vaccinate').addClass('event-selected');
     					}, 300);
-    					console.log('AA');
     				});
     				
 				}
@@ -64,6 +63,11 @@
 				}
 				
 			})
+
+			$('.treatment-header').click(function() {
+				$(this).next().slideToggle();
+			})
+
 		}
 	};
 }(jQuery));

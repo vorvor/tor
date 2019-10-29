@@ -26,7 +26,7 @@ function tor_base_node_info() {
       'help' => '',
     ),
     'drug_supply' => array(
-      'name' => t('Drug supply'),
+      'name' => t('Gyógyszer beszerzés'),
       'base' => 'node_content',
       'description' => '',
       'has_title' => '1',
@@ -58,7 +58,7 @@ function tor_base_node_info() {
       'help' => '',
     ),
     'pet' => array(
-      'name' => t('Pet'),
+      'name' => t('Háziállat'),
       'base' => 'node_content',
       'description' => '',
       'has_title' => '1',

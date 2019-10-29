@@ -20,10 +20,13 @@ function tor_base_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'taxonomy',
-        'settings' => array(),
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 3,
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 9,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -37,17 +40,23 @@ function tor_base_field_default_field_instances() {
     'label' => 'Drug set',
     'required' => 0,
     'settings' => array(
+      'behaviors' => array(
+        'taxonomy-index' => array(
+          'status' => TRUE,
+        ),
+      ),
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 0,
-      'module' => 'taxonomy',
+      'active' => 1,
+      'module' => 'entityreference',
       'settings' => array(
-        'autocomplete_path' => 'taxonomy/autocomplete',
+        'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
-      'type' => 'taxonomy_autocomplete',
+      'type' => 'entityreference_autocomplete',
       'weight' => 3,
     ),
   );
@@ -61,10 +70,13 @@ function tor_base_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'taxonomy',
-        'settings' => array(),
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 6,
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -78,17 +90,23 @@ function tor_base_field_default_field_instances() {
     'label' => 'Drug subtype',
     'required' => 0,
     'settings' => array(
+      'behaviors' => array(
+        'taxonomy-index' => array(
+          'status' => TRUE,
+        ),
+      ),
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 0,
-      'module' => 'taxonomy',
+      'active' => 1,
+      'module' => 'entityreference',
       'settings' => array(
-        'autocomplete_path' => 'taxonomy/autocomplete',
+        'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
-      'type' => 'taxonomy_autocomplete',
+      'type' => 'entityreference_autocomplete',
       'weight' => 2,
     ),
   );
@@ -102,10 +120,13 @@ function tor_base_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'taxonomy',
-        'settings' => array(),
-        'type' => 'taxonomy_term_reference_link',
-        'weight' => 2,
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -119,14 +140,23 @@ function tor_base_field_default_field_instances() {
     'label' => 'Drug type',
     'required' => 0,
     'settings' => array(
+      'behaviors' => array(
+        'taxonomy-index' => array(
+          'status' => TRUE,
+        ),
+      ),
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_buttons',
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
       'weight' => 1,
     ),
   );
@@ -174,7 +204,7 @@ function tor_base_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 5,
+      'weight' => 4,
     ),
   );
 
@@ -221,49 +251,7 @@ function tor_base_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 6,
-    ),
-  );
-
-  // Exported field_instance: 'node-drug_supply-field_drug'.
-  $field_instances['node-drug_supply-field_drug'] = array(
-    'bundle' => 'drug_supply',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'node_reference',
-        'settings' => array(),
-        'type' => 'node_reference_default',
-        'weight' => 0,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_drug',
-    'label' => 'Drug',
-    'required' => 0,
-    'settings' => array(
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'node_reference',
-      'settings' => array(
-        'autocomplete_match' => 'contains',
-        'autocomplete_path' => 'node_reference/autocomplete',
-        'size' => 60,
-      ),
-      'type' => 'node_reference_autocomplete',
-      'weight' => -3,
+      'weight' => 5,
     ),
   );
 
@@ -310,7 +298,52 @@ function tor_base_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => -1,
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance: 'node-drug_supply-field_drugs'.
+  $field_instances['node-drug_supply-field_drugs'] = array(
+    'bundle' => 'drug_supply',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_drugs',
+    'label' => 'Drug',
+    'required' => 0,
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => 1,
     ),
   );
 
@@ -625,10 +658,13 @@ function tor_base_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'node_reference',
-        'settings' => array(),
-        'type' => 'node_reference_default',
-        'weight' => 3,
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 14,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -648,9 +684,13 @@ function tor_base_field_default_field_instances() {
     'widget' => array(
       'active' => 1,
       'module' => 'options',
-      'settings' => array(),
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
       'type' => 'options_select',
-      'weight' => 2,
+      'weight' => 1,
     ),
   );
 
@@ -787,7 +827,7 @@ function tor_base_field_default_field_instances() {
         'display_label' => 1,
       ),
       'type' => 'options_onoff',
-      'weight' => 1,
+      'weight' => 2,
     ),
   );
 
@@ -800,10 +840,13 @@ function tor_base_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'node_reference',
-        'settings' => array(),
-        'type' => 'node_reference_default',
-        'weight' => 0,
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 9,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -822,9 +865,13 @@ function tor_base_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
       'weight' => 1,
     ),
   );
@@ -839,10 +886,13 @@ function tor_base_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'node_reference',
-        'settings' => array(),
-        'type' => 'node_reference_default',
-        'weight' => 5,
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 11,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -861,13 +911,13 @@ function tor_base_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'node_reference',
+      'module' => 'entityreference',
       'settings' => array(
-        'autocomplete_match' => 'contains',
-        'autocomplete_path' => 'node_reference/autocomplete',
+        'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
-      'type' => 'node_reference_autocomplete',
+      'type' => 'entityreference_autocomplete',
       'weight' => 6,
     ),
   );
@@ -929,10 +979,13 @@ function tor_base_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'node_reference',
-        'settings' => array(),
-        'type' => 'node_reference_default',
-        'weight' => 7,
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 10,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -951,13 +1004,13 @@ function tor_base_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'node_reference',
+      'module' => 'entityreference',
       'settings' => array(
-        'autocomplete_match' => 'contains',
-        'autocomplete_path' => 'node_reference/autocomplete',
+        'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
-      'type' => 'node_reference_autocomplete',
+      'type' => 'entityreference_autocomplete',
       'weight' => 2,
     ),
   );
@@ -1018,10 +1071,13 @@ function tor_base_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'node_reference',
-        'settings' => array(),
-        'type' => 'node_reference_default',
-        'weight' => 3,
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 12,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -1040,13 +1096,13 @@ function tor_base_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'node_reference',
+      'module' => 'entityreference',
       'settings' => array(
-        'autocomplete_match' => 'contains',
-        'autocomplete_path' => 'node_reference/autocomplete',
+        'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
-      'type' => 'node_reference_autocomplete',
+      'type' => 'entityreference_autocomplete',
       'weight' => 4,
     ),
   );
@@ -1284,15 +1340,17 @@ function tor_base_field_default_field_instances() {
   // Exported field_instance: 'node-owner-field_pets'.
   $field_instances['node-owner-field_pets'] = array(
     'bundle' => 'owner',
-    'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'node_reference',
-        'settings' => array(),
-        'type' => 'node_reference_default',
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
         'weight' => 6,
       ),
       'teaser' => array(
@@ -1303,6 +1361,16 @@ function tor_base_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'node',
+    'entityconnect' => array(
+      'button' => array(
+        'unload_add_button' => 1,
+        'unload_edit_button' => 1,
+      ),
+      'icon' => array(
+        'show_add_icon' => 0,
+        'show_edit_icon' => 0,
+      ),
+    ),
     'field_name' => 'field_pets',
     'label' => 'Pets',
     'required' => 0,
@@ -1312,13 +1380,21 @@ function tor_base_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'node_reference',
+      'module' => 'inline_entity_form',
       'settings' => array(
-        'autocomplete_match' => 'contains',
-        'autocomplete_path' => 'node_reference/autocomplete',
-        'size' => 60,
+        'fields' => array(),
+        'type_settings' => array(
+          'allow_clone' => 0,
+          'allow_existing' => 1,
+          'allow_new' => 1,
+          'delete_references' => 0,
+          'label_plural' => 'nodes',
+          'label_singular' => 'node',
+          'match_operator' => 'CONTAINS',
+          'override_labels' => 0,
+        ),
       ),
-      'type' => 'node_reference_autocomplete',
+      'type' => 'inline_entity_form',
       'weight' => 2,
     ),
   );
@@ -1350,7 +1426,7 @@ function tor_base_field_default_field_instances() {
     'required' => 0,
     'settings' => array(
       'entity_translation_sync' => FALSE,
-      'linkstate' => 'optional',
+      'linkstate' => 'static',
       'linkvalue' => 'Phone',
       'user_register_form' => FALSE,
     ),
@@ -1381,7 +1457,7 @@ function tor_base_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 3,
       ),
     ),
     'entity_type' => 'node',
@@ -1400,7 +1476,71 @@ function tor_base_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 0,
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'node-pet-field_date_of_birth'.
+  $field_instances['node-pet-field_date_of_birth'] = array(
+    'bundle' => 'pet',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'date',
+        'settings' => array(
+          'format_type' => 'long',
+          'fromto' => 'both',
+          'multiple_from' => '',
+          'multiple_number' => '',
+          'multiple_to' => '',
+          'show_remaining_days' => FALSE,
+        ),
+        'type' => 'date_default',
+        'weight' => 9,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'module' => 'date',
+        'settings' => array(
+          'format_type' => 'long',
+          'fromto' => 'both',
+          'multiple_from' => '',
+          'multiple_number' => '',
+          'multiple_to' => '',
+          'show_remaining_days' => FALSE,
+        ),
+        'type' => 'date_default',
+        'weight' => 2,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_date_of_birth',
+    'label' => 'Date of birth',
+    'required' => 0,
+    'settings' => array(
+      'default_value' => 'now',
+      'default_value2' => 'same',
+      'default_value_code' => '',
+      'default_value_code2' => '',
+      'entity_translation_sync' => FALSE,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'date',
+      'settings' => array(
+        'increment' => 15,
+        'input_format' => 'm/d/Y - H:i:s',
+        'input_format_custom' => '',
+        'label_position' => 'above',
+        'no_fieldset' => 0,
+        'text_parts' => array(),
+        'year_range' => '-10:+0',
+      ),
+      'type' => 'date_text',
+      'weight' => 2,
     ),
   );
 
@@ -1420,8 +1560,9 @@ function tor_base_field_default_field_instances() {
       ),
       'teaser' => array(
         'label' => 'above',
+        'module' => 'text',
         'settings' => array(),
-        'type' => 'hidden',
+        'type' => 'text_default',
         'weight' => 0,
       ),
     ),
@@ -1441,7 +1582,7 @@ function tor_base_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -3,
+      'weight' => 1,
     ),
   );
 
@@ -1463,7 +1604,7 @@ function tor_base_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 7,
       ),
     ),
     'entity_type' => 'node',
@@ -1482,7 +1623,7 @@ function tor_base_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 4,
+      'weight' => 8,
     ),
   );
 
@@ -1494,16 +1635,14 @@ function tor_base_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'inline',
-        'module' => 'hierarchical_term_formatter',
+        'label' => 'above',
+        'module' => 'entityreference',
         'settings' => array(
-          'display' => 'all',
-          'link' => 0,
-          'separator' => ' » ',
-          'wrap' => 'none',
+          'bypass_access' => FALSE,
+          'link' => FALSE,
         ),
-        'type' => 'hierarchical_term_formatter',
-        'weight' => 2,
+        'type' => 'entityreference_label',
+        'weight' => 10,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -1517,18 +1656,26 @@ function tor_base_field_default_field_instances() {
     'label' => 'Species',
     'required' => 0,
     'settings' => array(
+      'behaviors' => array(
+        'taxonomy-index' => array(
+          'status' => TRUE,
+        ),
+      ),
       'entity_translation_sync' => FALSE,
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 0,
-      'module' => 'taxonomy',
+      'active' => 1,
+      'module' => 'shs',
       'settings' => array(
-        'autocomplete_path' => 'taxonomy/autocomplete',
-        'size' => 60,
+        'shs' => array(
+          'create_new_levels' => 0,
+          'create_new_terms' => 0,
+          'force_deepest' => 0,
+        ),
       ),
-      'type' => 'taxonomy_autocomplete',
-      'weight' => -2,
+      'type' => 'taxonomy_shs',
+      'weight' => 3,
     ),
   );
 
@@ -1550,7 +1697,7 @@ function tor_base_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 4,
       ),
     ),
     'entity_type' => 'node',
@@ -1569,7 +1716,7 @@ function tor_base_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 1,
+      'weight' => 5,
     ),
   );
 
@@ -1597,7 +1744,7 @@ function tor_base_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 5,
       ),
     ),
     'entity_type' => 'node',
@@ -1625,7 +1772,7 @@ function tor_base_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_text',
-      'weight' => 2,
+      'weight' => 6,
     ),
   );
 
@@ -1647,7 +1794,7 @@ function tor_base_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 6,
       ),
     ),
     'entity_type' => 'node',
@@ -1666,63 +1813,7 @@ function tor_base_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 3,
-    ),
-  );
-
-  // Exported field_instance: 'node-pet-field_year_of_birth'.
-  $field_instances['node-pet-field_year_of_birth'] = array(
-    'bundle' => 'pet',
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'inline',
-        'module' => 'date',
-        'settings' => array(
-          'format_type' => 'year_only',
-          'fromto' => 'both',
-          'multiple_from' => '',
-          'multiple_number' => '',
-          'multiple_to' => '',
-          'show_remaining_days' => 0,
-        ),
-        'type' => 'date_default',
-        'weight' => 3,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_year_of_birth',
-    'label' => 'Year of birth',
-    'required' => 0,
-    'settings' => array(
-      'default_value' => 'blank',
-      'default_value2' => 'same',
-      'default_value_code' => '',
-      'default_value_code2' => '',
-      'entity_translation_sync' => FALSE,
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'date',
-      'settings' => array(
-        'increment' => 1,
-        'input_format' => 'm/d/Y - H:i:s',
-        'input_format_custom' => '',
-        'label_position' => 'above',
-        'no_fieldset' => 0,
-        'text_parts' => array(),
-        'year_range' => '-3:+3',
-      ),
-      'type' => 'date_text',
-      'weight' => -1,
+      'weight' => 7,
     ),
   );
 
@@ -1734,11 +1825,14 @@ function tor_base_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'hidden',
-        'module' => 'node_reference',
-        'settings' => array(),
-        'type' => 'node_reference_default',
-        'weight' => 0,
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 2,
       ),
       'paragraphs_editor_preview' => array(
         'label' => 'above',
@@ -1757,14 +1851,14 @@ function tor_base_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'node_reference',
+      'module' => 'entityreference',
       'settings' => array(
-        'autocomplete_match' => 'contains',
-        'autocomplete_path' => 'node_reference/autocomplete',
+        'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
-      'type' => 'node_reference_autocomplete',
-      'weight' => 1,
+      'type' => 'entityreference_autocomplete',
+      'weight' => 0,
     ),
   );
 
@@ -1811,7 +1905,7 @@ function tor_base_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 2,
+      'weight' => 1,
     ),
   );
 
@@ -1824,10 +1918,13 @@ function tor_base_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'node_reference',
-        'settings' => array(),
-        'type' => 'node_reference_default',
-        'weight' => 0,
+        'module' => 'entityreference',
+        'settings' => array(
+          'bypass_access' => FALSE,
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 2,
       ),
       'paragraphs_editor_preview' => array(
         'label' => 'above',
@@ -1846,14 +1943,14 @@ function tor_base_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'node_reference',
+      'module' => 'entityreference',
       'settings' => array(
-        'autocomplete_match' => 'contains',
-        'autocomplete_path' => 'node_reference/autocomplete',
+        'match_operator' => 'CONTAINS',
+        'path' => '',
         'size' => 60,
       ),
-      'type' => 'node_reference_autocomplete',
-      'weight' => 2,
+      'type' => 'entityreference_autocomplete',
+      'weight' => 0,
     ),
   );
 
@@ -1894,7 +1991,7 @@ function tor_base_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'taxonomy_autocomplete',
-      'weight' => 3,
+      'weight' => 1,
     ),
   );
 
@@ -1905,6 +2002,7 @@ function tor_base_field_default_field_instances() {
   t('Chip ID');
   t('Complementary');
   t('Cost of treatment');
+  t('Date of birth');
   t('Diagnosis');
   t('Drug');
   t('Drug amount');
@@ -1938,7 +2036,6 @@ function tor_base_field_default_field_instances() {
   t('Vaccination ID');
   t('Vaccination ID date');
   t('Vaccination ID vet Id');
-  t('Year of birth');
 
   return $field_instances;
 }
