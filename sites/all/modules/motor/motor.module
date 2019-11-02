@@ -19,6 +19,14 @@ function motor_menu() {
     'menu_name' => 'main-menu',
   );
 
+  $items['last-treatment'] = array(
+    'title' => 'Last treatment',
+    'page callback' => 'motor_last_treatment',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'main-menu',
+  );
+
   $items['ajax/search-owner/%'] = array(
     'access arguments' => array('access administration pages'),
     'page callback' => 'motor_search_owner',
@@ -31,6 +39,13 @@ function motor_menu() {
     'access arguments' => array('access administration pages'),
     'page callback' => 'motor_custom_autocomplete',
     'access callback' => 'motor_search_owner_permission',
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['ajax/drug-type'] = array(
+    'page callback' => 'motor_get_drug_type',
+    'access callback' => TRUE,
     'page arguments' => array(2),
     'type' => MENU_CALLBACK,
   );
@@ -49,6 +64,7 @@ function motor_init() {
 
   if ($path_without_last == '/node/add/event-treatment') {
     drupal_add_library('system', 'ui.autocomplete');
+    user_cookie_save(array('last-treatment' => $path));
     
     // Pass terms from vocabs for js autocomplete.
     $treatment_vocabs = array(
@@ -75,6 +91,16 @@ function motor_init() {
       'path' => drupal_get_path('module', 'motor'),
    );
     
+  }
+
+}
+
+function motor_last_treatment() {
+  if (isset($_COOKIE['Drupal_visitor_last-treatment'])) {
+    drupal_goto($_COOKIE['Drupal_visitor_last-treatment']);
+  } else {
+    drupal_set_message(t('No saved treatment.'));
+    drupal_goto('/');
   }
 
 }
@@ -173,6 +199,11 @@ function motor_block_info() {
     'cache' => DRUPAL_NO_CACHE,
   );
 
+  $blocks['former-treatments'] = array(
+    'info' => t('Former treatments'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
   $blocks['loggedin_user'] = array(
     'info' => t('Logged in user'),
     'cache' => DRUPAL_NO_CACHE,
@@ -180,6 +211,11 @@ function motor_block_info() {
 
   $blocks['drug_on_stock'] = array(
     'info' => t('Drug on stock'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['open_treatments'] = array(
+    'info' => t('Open tratments'),
     'cache' => DRUPAL_NO_CACHE,
   );
 
@@ -218,6 +254,16 @@ function motor_block_view($delta = '') {
       else {
           $block['content'] = t('No content available.');
       }
+
+    case 'former-treatments':
+      if (user_access('access content')) {
+          $block['subject'] = t('Former treatments');
+          $block['content'] = '<div id="former-treatments">' . t('Former treatments') . views_embed_view('former_treatments', 'default', arg(3)) . '</div>';
+      }
+      else {
+          $block['content'] = t('No content available.');
+      }
+
     break;
 
     case 'loggedin_user':
@@ -237,6 +283,11 @@ function motor_block_view($delta = '') {
     case 'drug_on_stock':
       $sum = motor_drug_stock_get(arg(1));
       $block['content'] = t('On stock:') . $sum;
+      
+    break;
+
+    case 'open_treatments':
+      $block['content'] = motor_manage_open_treatments();
       
     break;
   }
@@ -263,6 +314,73 @@ function motor_node_presave($node) {
 
   if ($node->type == 'pet') {
     $node->title = str_replace(' 00:00:00', '', $node->title);
+
+    // Add species and breed.
+    if (empty($node->field_species[LANGUAGE_NONE])) {
+
+      $terms = explode(',', $node->field_add_species[LANGUAGE_NONE][0]['value']);
+
+    
+      $vocabulary = taxonomy_vocabulary_machine_name_load('species');
+
+      // Add species.
+      $parent_id = motor_save_new_term(trim($terms[0]), 'species');
+
+      // Add breed.
+      $term = new stdClass();
+      $term->name = trim($terms[1]);
+      $term->vid = $vocabulary->vid;
+      $term->parent = array($parent_id);
+      taxonomy_term_save($term);
+      $breed_id = $term->tid;
+
+      $node->field_species[LANGUAGE_NONE][0]['target_id'] = $breed_id;
+      
+    } else {
+      $term = taxonomy_get_parents($node->field_species[LANGUAGE_NONE][0]['target_id']);
+      if (empty($term)) {
+        // its species (parent)
+        $parent_id = $node->field_species[LANGUAGE_NONE][0]['target_id'];
+        // Add breed.
+        $term = new stdClass();
+        $term->name = trim($terms[1]);
+        $term->vid = $vocabulary->vid;
+        $term->parent = array($parent_id);
+        taxonomy_term_save($term);
+        $breed_id = $term->tid;
+
+        $node->field_species[LANGUAGE_NONE][0]['target_id'] = $breed_id;
+
+      } else {
+        // its breed (child) - everythin set, nothingto do
+
+      }
+    }
+  }
+}
+
+function motor_node_validate($node, $form, &$form_state) {
+
+  if ($node->type == 'pet' && is_null($node->field_species[LANGUAGE_NONE][0]['target_id'])) {
+      $terms = explode(',', $node->field_add_species[LANGUAGE_NONE][0]['value']);
+
+      if (count($terms) !== 2) {
+        form_set_error('field_add_species',  t('Excepted 2 values with comma delimiter'));
+      }
+  }
+
+  if ($node->type == 'drug_supply') {
+    $drug_node = node_load($node->field_drugs[LANGUAGE_NONE][0]['target_id']);
+
+    $term = taxonomy_term_load($drug_node->field_drug_type[LANGUAGE_NONE][0]['target_id']);
+
+
+    if (!empty($term)) {
+      if ($term->name == 'Narcotic' && empty($node->field_drug_distributor[LANGUAGE_NONE][0]['target_id'])) {
+
+        form_set_error('field_drug_distributor',  t('Drug distributor field is required in this case!'));
+      }
+    }
   }
 }
 
@@ -314,22 +432,45 @@ function motor_form_alter(&$form, &$form_state, $form_id) {
         'data-voc' => $voc,
       );
     }
-    $form['field_pet'][LANGUAGE_NONE]['#default_value'] = arg(3);
+
+    if (!isset($form['#node']->nid)) {
+      $form['field_pet'][LANGUAGE_NONE]['#default_value'] = arg(3);
+    }
 
     $form['actions']['submit']['#submit'][] = 'motor_add_treatment_custom_submit';
 
   }
 
   if ($form_id == 'event_vaccinate_node_form') {
+    if (!isset($form['#node']->nid)) {
       $form['field_pet'][LANGUAGE_NONE]['#default_value'] = arg(3);
-      $form['actions']['submit']['#submit'][] = 'motor_add_treatment_custom_submit';
-
     }
+    $form['actions']['submit']['#submit'][] = 'motor_add_treatment_custom_submit';
+
+  }
 
 
   if ($form_id == 'owner_node_form') {
     $form['#attached']['js'][] = drupal_get_path('module', 'motor') . '/js/embed-entity-autonodetitle.js';
   }
+
+  if ($form_id == 'drug_node_form') {
+    
+    if (isset($_GET['type'])) {
+      $type = $_GET['type'];
+      $term = taxonomy_get_term_by_name($type);
+      $term = reset($term);
+      if (isset($term->tid)) {
+        $form['field_drug_type'][LANGUAGE_NONE]['#default_value'] = $term->tid;
+        $form['field_drug_type'][LANGUAGE_NONE]['#disabled'] = TRUE;
+      }
+    }
+  }
+
+  if ($form_id == 'drug_supply_node_form') {
+    $form['#attached']['js'][] = drupal_get_path('module', 'motor') . '/js/drug-supply.js';
+  }
+
 }
 
 function motor_add_treatment_custom_submit($form, &$form_state) {
@@ -428,4 +569,22 @@ function motor_calculate_treatment_sum_price($nid) {
   }
 
   return $sum;
+}
+
+
+function motor_manage_open_treatments() {
+  $open_treatments = views_get_view_result('open_treatments', 'page');
+  $wrapper = '<div id="open-treatments">###VIEWS###</div>';
+  if (count($open_treatments) > 4) {
+    $wrapper = '<div id="open-treatments" style="background:red;height:10000px;padding: 10px; color: #fff;">###VIEWS###</div>';
+  }
+
+  $views = views_embed_view('open_treatments', 'page') . views_embed_view('open_treatments', 'page_1');
+  return str_replace('###VIEWS###', $views, $wrapper);
+}
+
+function motor_get_drug_type($nid) {
+  $node = node_load($nid);
+  $term = taxonomy_term_load($node->field_drug_type[LANGUAGE_NONE][0]['target_id']);
+  drupal_json_output($term->name);
 }

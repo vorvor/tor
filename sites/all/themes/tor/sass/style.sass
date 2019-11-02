@@ -12,7 +12,7 @@ body.page-dashboard
 .node-event_vaccinate-form,
 .node-event_treatment-form
 	.form-field-name-field-pet
-		display: none
+		display: block
 
 #block-views-current-pet-block,
 #block-views-current-owner-block
@@ -27,13 +27,16 @@ th
 
 #block-system-main-menu
 	ul
+		overflow: hidden
 		margin: 0
 		padding: 0
 		li
 			float: left
 			margin-right: 10px
+			margin-top: 10px
 			list-style-image: none
 			list-style-type: none
+			height: 30px
 
 .block-motor
 body.page-node-add-event-treatment .block
@@ -58,7 +61,7 @@ h2.block__title
 #block-motor-loggedin-user,
 a.add-event
 	padding: 8px 12px
-	background: red
+	background: #d35f5f
 	color: #fff
 	text-decoration: none
 	-webkit-border-radius: 30px
@@ -74,6 +77,9 @@ a.add-event
 	float: right
 	padding: 2px 20px
 	border: 0
+#block-system-main-menu ul li#menu-item-last-treatment 
+	a
+		background-color: #2c89a0
 #block-motor-loggedin-user
 	text-align: right
 
@@ -134,3 +140,14 @@ a.add-event.event-selected
 		padding-left: 30px
 		.sum-of-cost-content
 			text-align: right
+
+#open-treatments
+	border: 1px solid #ccc
+	padding: 10px
+	p, table
+		margin: 0
+	.view-header
+		font-weight: bold
+#block-motor-former-treatments
+	.views-label
+		font-weight: bold

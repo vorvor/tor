@@ -68,6 +68,24 @@
 				$(this).next().slideToggle();
 			})
 
+			if ($('body').hasClass(''))
+			$( document ).ajaxComplete(function() {
+				$('select.shs-select-level-1').once().change(function() {
+					if ($(this).val() == '_none') {
+						$('.form-field-name-field-add-species label').html('Faj és fajta hozzáadása (vesszővel elválasztva)');
+					} else {
+						$('.form-field-name-field-add-species label').html('Fajta hozzáadása');
+					}
+				})
+				$('select.shs-select-level-2').once().change(function() {
+					if ($(this).val() == '_none') {
+						$('.form-field-name-field-add-species').show();
+					} else {
+						$('.form-field-name-field-add-species').hide();
+					}
+				})
+			})
+
 		}
 	};
 }(jQuery));

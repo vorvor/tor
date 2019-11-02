@@ -1,0 +1,6 @@
+name = Views More Filters
+description = Additional filters for Views.
+core = 7.x
+
+files[] = views_more_filters_handler_filter_author_select.inc
+files[] = views_more_filters.views.inc
