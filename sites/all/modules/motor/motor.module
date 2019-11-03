@@ -255,6 +255,8 @@ function motor_block_view($delta = '') {
           $block['content'] = t('No content available.');
       }
 
+      break;
+
     case 'former-treatments':
       if (user_access('access content')) {
           $block['subject'] = t('Former treatments');
@@ -485,8 +487,8 @@ function motor_drug_stock_get($nid) {
   $query = db_select('field_data_field_drug_qty', 'dq')
   ->fields('dq', array('field_drug_qty_value'))
   ->condition('dq.bundle', 'drug_supply');
-  $query->leftJoin('field_data_field_drug', 'd', 'd.entity_id = dq.entity_id');
-  $query->condition('d.field_drug_target_id', $nid);
+  $query->leftJoin('field_data_field_drugs', 'd', 'd.entity_id = dq.entity_id');
+  $query->condition('d.field_drugs_target_id', $nid);
 
   $results = $query
   ->execute()
@@ -574,6 +576,11 @@ function motor_calculate_treatment_sum_price($nid) {
 
 function motor_manage_open_treatments() {
   $open_treatments = views_get_view_result('open_treatments', 'page');
+
+  if  (count($open_treatments) == 0) {
+    return FALSE;
+  }
+
   $wrapper = '<div id="open-treatments">###VIEWS###</div>';
   if (count($open_treatments) > 4) {
     $wrapper = '<div id="open-treatments" style="background:red;height:10000px;padding: 10px; color: #fff;">###VIEWS###</div>';
@@ -587,4 +594,20 @@ function motor_get_drug_type($nid) {
   $node = node_load($nid);
   $term = taxonomy_term_load($node->field_drug_type[LANGUAGE_NONE][0]['target_id']);
   drupal_json_output($term->name);
+}
+
+function motor_find_owner($nid, $field) {
+  $query = db_select('field_data_field_pets', 'p')
+  ->fields('p', array('entity_id'))
+  ->condition('p.field_pets_target_id', $nid);
+
+  $results = $query
+  ->execute()
+  ->fetchAll();
+
+  $sum = 0;
+  foreach ($results as $row) {
+    $owner = node_load($row->entity_id);
+    return $owner->field_first_name[LANGUAGE_NONE][0]['safe_value'];
+  }
 }

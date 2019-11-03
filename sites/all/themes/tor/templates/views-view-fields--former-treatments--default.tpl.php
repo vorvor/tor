@@ -76,8 +76,11 @@ foreach ($fields as $id => $field): ?>
 			<?php print $fields['field_notes']->content; ?>
 		</div>
 		<div class="recipe-content">
-			<?php print $fields['field_recipe']->label_html; ?>
-			<?php print $fields['field_recipe']->content; ?>
+			<?php if (isset($fields['field_recipe'])) {
+					print $fields['field_recipe']->label_html;
+					print $fields['field_recipe']->content;
+				}
+			?>
 		</div>
 		<div class="drugs-used-content">
 			<?php print '<span class="views-label views-label-field-recipe">' . t('Drugs used:') . '</span>'; ?>
