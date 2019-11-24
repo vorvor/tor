@@ -38,9 +38,7 @@ function tor_base_menu_default_menu_links() {
     'router_path' => 'node/add/drug-supply',
     'link_title' => 'Drug supply',
     'options' => array(
-      'attributes' => array(
-        'title' => '',
-      ),
+      'attributes' => array(),
       'alter' => TRUE,
       'identifier' => 'main-menu_drug-supply:node/add/drug-supply',
     ),
@@ -81,9 +79,7 @@ function tor_base_menu_default_menu_links() {
     'router_path' => 'admin/structure/taxonomy/%',
     'link_title' => 'Fajok, fajták',
     'options' => array(
-      'attributes' => array(
-        'title' => '',
-      ),
+      'attributes' => array(),
       'alter' => TRUE,
       'identifier' => 'main-menu_fajok-fajtk:admin/structure/taxonomy/species',
     ),
@@ -104,9 +100,7 @@ function tor_base_menu_default_menu_links() {
     'router_path' => 'node/add/drug-supply',
     'link_title' => 'Gyógyszer beszerzés',
     'options' => array(
-      'attributes' => array(
-        'title' => '',
-      ),
+      'attributes' => array(),
       'alter' => TRUE,
       'identifier' => 'main-menu_gygyszer-beszerzs:node/add/drug-supply',
     ),
@@ -147,9 +141,7 @@ function tor_base_menu_default_menu_links() {
     'router_path' => 'node/add/owner',
     'link_title' => 'Új gazdi',
     'options' => array(
-      'attributes' => array(
-        'title' => '',
-      ),
+      'attributes' => array(),
       'alter' => TRUE,
       'identifier' => 'main-menu_j-gazdi:node/add/owner',
     ),
@@ -170,9 +162,7 @@ function tor_base_menu_default_menu_links() {
     'router_path' => 'node/add/pet',
     'link_title' => 'Új állat',
     'options' => array(
-      'attributes' => array(
-        'title' => '',
-      ),
+      'attributes' => array(),
       'alter' => TRUE,
       'identifier' => 'main-menu_j-llat:node/add/pet',
     ),
@@ -211,25 +201,6 @@ function tor_base_menu_default_menu_links() {
     'customized' => 1,
     'language' => 'und',
     'menu_links_customized' => 1,
-  );
-  // Exported menu link: main-menu_narcotic-tracking-list:narcotic-tracking-list.
-  $menu_links['main-menu_narcotic-tracking-list:narcotic-tracking-list'] = array(
-    'menu_name' => 'main-menu',
-    'link_path' => 'narcotic-tracking-list',
-    'router_path' => 'narcotic-tracking-list',
-    'link_title' => 'Narcotic tracking list',
-    'options' => array(
-      'identifier' => 'main-menu_narcotic-tracking-list:narcotic-tracking-list',
-    ),
-    'module' => 'system',
-    'hidden' => 0,
-    'external' => 0,
-    'has_children' => 0,
-    'expanded' => 0,
-    'weight' => 0,
-    'customized' => 0,
-    'language' => 'und',
-    'menu_links_customized' => 0,
   );
   // Exported menu link: main-menu_owners:owners.
   $menu_links['main-menu_owners:owners'] = array(
@@ -342,7 +313,6 @@ function tor_base_menu_default_menu_links() {
   t('Gyógyszer beszerzés');
   t('Home');
   t('Last treatment');
-  t('Narcotic tracking list');
   t('Owners');
   t('Statistics');
   t('Treatments');

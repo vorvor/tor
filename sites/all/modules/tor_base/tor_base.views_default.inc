@@ -284,7 +284,11 @@ function tor_base_views_default_views() {
   $handler->display->display_options['title'] = 'Drugs';
   $handler->display->display_options['use_ajax'] = TRUE;
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['type'] = 'role';
+  $handler->display->display_options['access']['role'] = array(
+    3 => '3',
+    4 => '4',
+  );
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
@@ -1533,7 +1537,11 @@ print motor_calculate_treatment_sum_price($row->nid) . \'HUF\';
   $handler->display->display_options['title'] = 'Owners';
   $handler->display->display_options['use_ajax'] = TRUE;
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['type'] = 'role';
+  $handler->display->display_options['access']['role'] = array(
+    3 => '3',
+    4 => '4',
+  );
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'better_exposed_filters';
@@ -1905,7 +1913,11 @@ print motor_calculate_treatment_sum_price($row->nid) . \'HUF\';
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Statistics';
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['type'] = 'role';
+  $handler->display->display_options['access']['role'] = array(
+    3 => '3',
+    4 => '4',
+  );
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'better_exposed_filters';
@@ -2263,7 +2275,11 @@ print motor_calculate_treatment_sum_price($row->nid);
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Treatments';
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['type'] = 'role';
+  $handler->display->display_options['access']['role'] = array(
+    3 => '3',
+    4 => '4',
+  );
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
@@ -2423,7 +2439,11 @@ print motor_calculate_treatment_sum_price($row->nid);
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['title'] = 'Vaccinates';
   $handler->display->display_options['use_more_always'] = FALSE;
-  $handler->display->display_options['access']['type'] = 'perm';
+  $handler->display->display_options['access']['type'] = 'role';
+  $handler->display->display_options['access']['role'] = array(
+    3 => '3',
+    4 => '4',
+  );
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';

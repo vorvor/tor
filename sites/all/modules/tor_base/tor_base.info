@@ -125,7 +125,6 @@ features[menu_links][] = main-menu_home:<front>
 features[menu_links][] = main-menu_j-gazdi:node/add/owner
 features[menu_links][] = main-menu_j-llat:node/add/pet
 features[menu_links][] = main-menu_last-treatment:last-treatment
-features[menu_links][] = main-menu_narcotic-tracking-list:narcotic-tracking-list
 features[menu_links][] = main-menu_owners:owners
 features[menu_links][] = main-menu_sszes-gazdi:owners-all
 features[menu_links][] = main-menu_statistics:statistics
