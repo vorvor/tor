@@ -22,7 +22,7 @@ function motor_menu() {
   $items['last-treatment'] = array(
     'title' => 'Last treatment',
     'page callback' => 'motor_last_treatment',
-    'access callback' => TRUE,
+    'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
     'menu_name' => 'main-menu',
   );
@@ -53,7 +53,7 @@ function motor_menu() {
   $items['narcotic-tracking-list'] = array(
     'title' => 'Narcotic tracking list',
     'page callback' => 'motor_narcotic_tracking',
-    'access callback' => TRUE,
+    'access arguments' => array('access administration pages'),
     'type' => MENU_NORMAL_ITEM,
     'menu_name' => 'main-menu',
   );
@@ -668,7 +668,6 @@ function motor_narcotic_tracking_drug($nid) {
   }
 
   rsort($mix);
-  dpm($mix);
 
   $sum = 0;
   foreach ($mix as $row) {
