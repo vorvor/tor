@@ -11,6 +11,28 @@
 function tor_base_field_default_field_bases() {
   $field_bases = array();
 
+  // Exported field_base: 'field_add_species'.
+  $field_bases['field_add_species'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_add_species',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
   // Exported field_base: 'field_address'.
   $field_bases['field_address'] = array(
     'active' => 1,
@@ -185,7 +207,7 @@ function tor_base_field_default_field_bases() {
         ),
         'view' => array(
           'args' => array(),
-          'display_name' => 'entityreference_4',
+          'display_name' => 'entityreference_2',
           'view_name' => 'drugs',
         ),
       ),
@@ -220,6 +242,42 @@ function tor_base_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'taxonomy_term_reference',
+  );
+
+  // Exported field_base: 'field_drug_distributor'.
+  $field_bases['field_drug_distributor'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_drug_distributor',
+    'indexes' => array(
+      'target_id' => array(
+        0 => 'target_id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'entityreference',
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+      'handler' => 'base',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'sort' => array(
+          'type' => 'none',
+        ),
+        'target_bundles' => array(
+          'drug_distributor' => 'drug_distributor',
+        ),
+      ),
+      'target_type' => 'node',
+    ),
+    'translatable' => 0,
+    'type' => 'entityreference',
   );
 
   // Exported field_base: 'field_drug_qty'.
@@ -504,6 +562,27 @@ function tor_base_field_default_field_bases() {
     'type' => 'text_long',
   );
 
+  // Exported field_base: 'field_notes_for_owner'.
+  $field_bases['field_notes_for_owner'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_notes_for_owner',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'entity_translation_sync' => FALSE,
+    ),
+    'translatable' => 0,
+    'type' => 'text_long',
+  );
+
   // Exported field_base: 'field_operation'.
   $field_bases['field_operation'] = array(
     'active' => 1,
@@ -772,6 +851,32 @@ function tor_base_field_default_field_bases() {
     'type' => 'list_boolean',
   );
 
+  // Exported field_base: 'field_vaccinate_closed'.
+  $field_bases['field_vaccinate_closed'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_vaccinate_closed',
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        0 => 'Oltás nincs lezárva',
+        1 => 'Oltás lezárva',
+      ),
+      'allowed_values_function' => '',
+      'entity_translation_sync' => FALSE,
+    ),
+    'translatable' => 0,
+    'type' => 'list_boolean',
+  );
+
   // Exported field_base: 'field_vaccinate_flea_killer'.
   $field_bases['field_vaccinate_flea_killer'] = array(
     'active' => 1,
@@ -796,7 +901,9 @@ function tor_base_field_default_field_bases() {
           ),
         ),
         'view' => array(
-          'args' => array(),
+          'args' => array(
+            0 => 'flea/tick killer',
+          ),
           'display_name' => 'entityreference_1',
           'view_name' => 'drugs',
         ),
@@ -844,12 +951,14 @@ function tor_base_field_default_field_bases() {
       'handler_settings' => array(
         'behaviors' => array(
           'views-select-list' => array(
-            'status' => 0,
+            'status' => 1,
           ),
         ),
         'view' => array(
-          'args' => array(),
-          'display_name' => 'entityreference_2',
+          'args' => array(
+            0 => 'rabies',
+          ),
+          'display_name' => 'entityreference_1',
           'view_name' => 'drugs',
         ),
       ),
@@ -900,8 +1009,10 @@ function tor_base_field_default_field_bases() {
           ),
         ),
         'view' => array(
-          'args' => array(),
-          'display_name' => 'entityreference_3',
+          'args' => array(
+            0 => 'worming',
+          ),
+          'display_name' => 'entityreference_1',
           'view_name' => 'drugs',
         ),
       ),

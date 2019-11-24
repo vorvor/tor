@@ -74,6 +74,29 @@ function tor_base_menu_default_menu_links() {
     'language' => 'und',
     'menu_links_customized' => 1,
   );
+  // Exported menu link: main-menu_fajok-fajtk:admin/structure/taxonomy/species.
+  $menu_links['main-menu_fajok-fajtk:admin/structure/taxonomy/species'] = array(
+    'menu_name' => 'main-menu',
+    'link_path' => 'admin/structure/taxonomy/species',
+    'router_path' => 'admin/structure/taxonomy/%',
+    'link_title' => 'Fajok, fajták',
+    'options' => array(
+      'attributes' => array(
+        'title' => '',
+      ),
+      'alter' => TRUE,
+      'identifier' => 'main-menu_fajok-fajtk:admin/structure/taxonomy/species',
+    ),
+    'module' => 'menu',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -42,
+    'customized' => 1,
+    'language' => 'und',
+    'menu_links_customized' => 1,
+  );
   // Exported menu link: main-menu_gygyszer-beszerzs:node/add/drug-supply.
   $menu_links['main-menu_gygyszer-beszerzs:node/add/drug-supply'] = array(
     'menu_name' => 'main-menu',
@@ -163,6 +186,51 @@ function tor_base_menu_default_menu_links() {
     'language' => 'und',
     'menu_links_customized' => 1,
   );
+  // Exported menu link: main-menu_last-treatment:last-treatment.
+  $menu_links['main-menu_last-treatment:last-treatment'] = array(
+    'menu_name' => 'main-menu',
+    'link_path' => 'last-treatment',
+    'router_path' => 'last-treatment',
+    'link_title' => 'Last treatment',
+    'options' => array(
+      'alter' => TRUE,
+      'attributes' => array(),
+      'item_attributes' => array(
+        'id' => 'menu-item-last-treatment',
+        'class' => '',
+        'style' => '',
+      ),
+      'identifier' => 'main-menu_last-treatment:last-treatment',
+    ),
+    'module' => 'system',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -36,
+    'customized' => 1,
+    'language' => 'und',
+    'menu_links_customized' => 1,
+  );
+  // Exported menu link: main-menu_narcotic-tracking-list:narcotic-tracking-list.
+  $menu_links['main-menu_narcotic-tracking-list:narcotic-tracking-list'] = array(
+    'menu_name' => 'main-menu',
+    'link_path' => 'narcotic-tracking-list',
+    'router_path' => 'narcotic-tracking-list',
+    'link_title' => 'Narcotic tracking list',
+    'options' => array(
+      'identifier' => 'main-menu_narcotic-tracking-list:narcotic-tracking-list',
+    ),
+    'module' => 'system',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => 0,
+    'customized' => 0,
+    'language' => 'und',
+    'menu_links_customized' => 0,
+  );
   // Exported menu link: main-menu_owners:owners.
   $menu_links['main-menu_owners:owners'] = array(
     'menu_name' => 'main-menu',
@@ -183,15 +251,103 @@ function tor_base_menu_default_menu_links() {
     'language' => 'und',
     'menu_links_customized' => 1,
   );
+  // Exported menu link: main-menu_sszes-gazdi:owners-all.
+  $menu_links['main-menu_sszes-gazdi:owners-all'] = array(
+    'menu_name' => 'main-menu',
+    'link_path' => 'owners-all',
+    'router_path' => 'owners-all',
+    'link_title' => 'Összes gazdi',
+    'options' => array(
+      'attributes' => array(),
+      'alter' => TRUE,
+      'identifier' => 'main-menu_sszes-gazdi:owners-all',
+    ),
+    'module' => 'system',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -39,
+    'customized' => 1,
+    'language' => 'und',
+    'menu_links_customized' => 1,
+  );
+  // Exported menu link: main-menu_statistics:statistics.
+  $menu_links['main-menu_statistics:statistics'] = array(
+    'menu_name' => 'main-menu',
+    'link_path' => 'statistics',
+    'router_path' => 'statistics',
+    'link_title' => 'Statistics',
+    'options' => array(
+      'alter' => TRUE,
+      'identifier' => 'main-menu_statistics:statistics',
+    ),
+    'module' => 'system',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -38,
+    'customized' => 1,
+    'language' => 'und',
+    'menu_links_customized' => 1,
+  );
+  // Exported menu link: main-menu_treatments:treatments.
+  $menu_links['main-menu_treatments:treatments'] = array(
+    'menu_name' => 'main-menu',
+    'link_path' => 'treatments',
+    'router_path' => 'treatments',
+    'link_title' => 'Treatments',
+    'options' => array(
+      'alter' => TRUE,
+      'identifier' => 'main-menu_treatments:treatments',
+    ),
+    'module' => 'system',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -41,
+    'customized' => 1,
+    'language' => 'und',
+    'menu_links_customized' => 1,
+  );
+  // Exported menu link: main-menu_vaccinates:vaccinates.
+  $menu_links['main-menu_vaccinates:vaccinates'] = array(
+    'menu_name' => 'main-menu',
+    'link_path' => 'vaccinates',
+    'router_path' => 'vaccinates',
+    'link_title' => 'Vaccinates',
+    'options' => array(
+      'alter' => TRUE,
+      'identifier' => 'main-menu_vaccinates:vaccinates',
+    ),
+    'module' => 'system',
+    'hidden' => 0,
+    'external' => 0,
+    'has_children' => 0,
+    'expanded' => 0,
+    'weight' => -40,
+    'customized' => 1,
+    'language' => 'und',
+    'menu_links_customized' => 1,
+  );
 
   // Translatables
   // Included for use with string extractors like potx.
   t('Dashboard');
   t('Drug supply');
   t('Drugs');
+  t('Fajok, fajták');
   t('Gyógyszer beszerzés');
   t('Home');
+  t('Last treatment');
+  t('Narcotic tracking list');
   t('Owners');
+  t('Statistics');
+  t('Treatments');
+  t('Vaccinates');
+  t('Összes gazdi');
   t('Új gazdi');
   t('Új állat');
 

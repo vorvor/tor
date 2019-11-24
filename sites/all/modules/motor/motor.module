@@ -50,6 +50,14 @@ function motor_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['narcotic-tracking-list'] = array(
+    'title' => 'Narcotic tracking list',
+    'page callback' => 'motor_narcotic_tracking',
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+    'menu_name' => 'main-menu',
+  );
+
   return $items;
 }
 
@@ -596,7 +604,7 @@ function motor_get_drug_type($nid) {
   drupal_json_output($term->name);
 }
 
-function motor_find_owner($nid, $field) {
+function motor_find_owner($nid) {
   $query = db_select('field_data_field_pets', 'p')
   ->fields('p', array('entity_id'))
   ->condition('p.field_pets_target_id', $nid);
@@ -608,6 +616,103 @@ function motor_find_owner($nid, $field) {
   $sum = 0;
   foreach ($results as $row) {
     $owner = node_load($row->entity_id);
-    return $owner->field_first_name[LANGUAGE_NONE][0]['safe_value'];
+    return array(
+      $owner->field_first_name[LANGUAGE_NONE][0]['safe_value'],
+      $owner->field_last_name[LANGUAGE_NONE][0]['safe_value'],
+      $owner->field_address[LANGUAGE_NONE][0],
+    );
   }
+}
+
+function motor_narcotic_tracking() {
+
+  $term = taxonomy_get_term_by_name('Narcotic');
+  $term = reset($term);
+
+
+  $query = db_select('field_data_field_drug_type', 'd')
+  ->fields('d', array('entity_id'))
+  ->condition('d.field_drug_type_target_id', $term->tid);
+
+  $results = $query
+  ->execute()
+  ->fetchAll();
+
+  foreach ($results as $row) {
+    $node = node_load($row->entity_id);
+    $output[] = '<div><h2>' . $node->title . '</h2></div>';
+    $output[] = motor_narcotic_tracking_drug($row->entity_id);
+  }
+
+  return implode('<br />', $output);
+}
+
+function motor_narcotic_tracking_drug($nid) {
+  $mix = [];
+  $supply = views_get_view_result('narcotic_tracking_drug_supply', 'page', $nid);
+  foreach ($supply as $row) {
+    $timestamp = $row->node_created;
+    while (isset($mix[$timestamp])) {
+      $timestamp++;
+    }
+    $mix[$timestamp] = $row;
+  }
+  
+  $consuption = views_get_view_result('narcotic_tracking_consuption', 'page', $nid);
+  foreach ($consuption as $row) {
+    $timestamp = $row->node_created;
+    while (isset($mix[$timestamp])) {
+      $timestamp++;
+    }
+    $mix[$timestamp] = $row;
+  }
+
+  rsort($mix);
+  dpm($mix);
+
+  $sum = 0;
+  foreach ($mix as $row) {
+    $field = [];
+    
+    $field[] = date('Y-m-d', $row->node_created);
+
+    $type = (isset($row->node_field_data_field_pet_nid)) ? t('Consuption') : t('Supply');
+    $field[] = $type;
+    
+    $owner_pet = '';
+    if (isset($row->node_field_data_field_pet_nid)) {
+      // Consuption.
+      $owner = motor_find_owner($row->node_field_data_field_pet_nid);
+      $pet = $row->field_field_name[0]['raw']['value'];
+      $owner_pet = $owner[0] . ' ' . $owner[1] . '(' . $pet . ')';
+      $field[] = $owner_pet;
+
+      $owner_address = array($owner[2]['locality'], $owner[2]['postal_code'], $owner[2]['thoroughfare']);
+      $field[] = implode(' ', $owner_address);
+
+      $field[] = '-' . $row->field_field_drug_qty[0]['raw']['value'];
+
+      $sum -= $row->field_field_drug_qty[0]['raw']['value'];
+      $field[] = $sum;
+    } else {
+      // Supply.
+      $company = $row->node_field_data_field_drug_distributor_title;
+      $field[] = $company;
+
+      $data = $row->field_field_address[0]['raw'];
+      $company_address = array($data['locality'], $data['postal_code'], $data['thoroughfare']);
+      $field[] = implode(' ', $company_address);
+
+      $field[] = '+' . $row->field_field_drug_qty[0]['raw']['value'];
+
+      $sum += $row->field_field_drug_qty[0]['raw']['value'];
+      $field[] = $sum;
+    }
+
+    $fields[] = $field;
+  }
+  
+  $header = [];
+  return theme('table', array('header' => $header, 'rows' => $fields));
+
 }

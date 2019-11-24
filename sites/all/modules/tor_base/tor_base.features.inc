@@ -25,6 +25,14 @@ function tor_base_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
+    'drug_distributor' => array(
+      'name' => t('Drug distributor'),
+      'base' => 'node_content',
+      'description' => '',
+      'has_title' => '1',
+      'title_label' => t('Company'),
+      'help' => '',
+    ),
     'drug_supply' => array(
       'name' => t('Gyógyszer beszerzés'),
       'base' => 'node_content',
@@ -42,7 +50,7 @@ function tor_base_node_info() {
       'help' => '',
     ),
     'event_vaccinate' => array(
-      'name' => t('Event vaccinate'),
+      'name' => t('Oltás'),
       'base' => 'node_content',
       'description' => '',
       'has_title' => '1',
