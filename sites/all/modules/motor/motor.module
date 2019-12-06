@@ -349,11 +349,12 @@ function motor_node_presave($node) {
     } else {
       $term = taxonomy_get_parents($node->field_species[LANGUAGE_NONE][0]['target_id']);
       if (empty($term)) {
+        $terms = explode(',', $node->field_add_species[LANGUAGE_NONE][0]['value']);
         // its species (parent)
         $parent_id = $node->field_species[LANGUAGE_NONE][0]['target_id'];
         // Add breed.
         $term = new stdClass();
-        $term->name = trim($terms[1]);
+        $term->name = trim($terms[0]);
         $term->vid = $vocabulary->vid;
         $term->parent = array($parent_id);
         taxonomy_term_save($term);

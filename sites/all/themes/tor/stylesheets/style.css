@@ -229,3 +229,8 @@ a.add-event.event-selected {
 #block-motor-former-treatments .views-label {
   font-weight: bold;
 }
+
+/* line 155, ../sass/style.sass */
+.form-field-type-entityreference.form-field-name-field-pets .form-item-field-pets-und-form-title {
+  display: none;
+}
